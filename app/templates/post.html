@@ -8,11 +8,11 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="{{url_for('auth.post')}}">Post Something</a>
-    {% for post in posts %}
-        <h1>{{post.title}}</h1>
-        <p>{{post.author}}</p>
-        <p>{{post.post}}</p>
-    {% endfor %}
+    <form action="{{url_for('auth.post')}}" method="POST" novalidate>
+        {{form.hidden_tag()}}
+        {{form.post_title.label}}{{form.post_title}}
+        <button type="submit">Post</button>
+    </form>
+
 </body>
 </html>
