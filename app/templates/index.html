@@ -2,7 +2,7 @@
 
 {% block content %}
     {% for post in posts %}
-        <h1><a href="{{ url_for('auth.edit_post') }}">{{ post.title }}</a></h1>
+        <h1><a href="{{ url_for('auth.edit_post', post_title=post['title']) }}">{{ post.title }}</a></h1>
         <p>{{ post.author }}</p>
         <p>{{ post.post }}</p>
     {% endfor %}

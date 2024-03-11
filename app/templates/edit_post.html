@@ -9,12 +9,11 @@
 </head>
 <body>
     <h1>EDIT POST</h1>
-    <form action="{{ url_for('auth.edit_post') }}" method="POST" novalidate>
+    <form method="POST" novalidate>
         {{ form.hidden_tag() }}
         {{ form.post_title.label }}{{ form.post_title }}
         {{ form.post_content.label }}{{ form.post_content }}
         <button type="submit">Save</button>
     </form>
-    {{ posts }}
 </body>
 </html>

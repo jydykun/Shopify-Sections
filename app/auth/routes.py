@@ -11,7 +11,7 @@ def login():
     if form.validate_on_submit():
         username = form.username.data
         session['username'] = username
-        return redirect(url_for('auth.post'))
+        return redirect(url_for('main.index'))
     return render_template('login.html', form=form)
 
 @bp.route('/logout')
@@ -28,25 +28,32 @@ def post():
                 'title': form.post_title.data.capitalize(),
                 'author': session['username'].capitalize(),
                 'post': form.post_content.data
-            }
-            session['post'] = post
+                }
+            posts.append(post)
             flash("Posted Successfully")
             return redirect(url_for("main.index"))
     return render_template("post.html", form=form)
 
 
-@bp.route('/edit_post/', methods=['GET', 'POST'])
-def edit_post():
+@bp.route('/edit_post/<post_title>', methods=['GET', 'POST'])
+def edit_post(post_title):
     form = PostForm()
+    new_title = form.post_title.data
+    new_content = form.post_content.data
+    edit = {
+        'title': new_title,
+        'post': new_content
+    }
     if 'username' in session:
         if form.validate_on_submit():
-            posts = [{
-                'title': form.post_title.data,
-                'post': form.post_content.data,
-            }]
+            for post in posts:
+                if post['title'] == post_title:
+                    post.update(edit)
+                    break
             flash("Saved")
-            return redirect(url_for("main.index", posts=posts))
+            return redirect(url_for('main.index'))
     else:
-        return "You need to login."
-    return render_template("edit_post.html", form=form)
+        return "You need to logged in."
+
+    return render_template("edit_post.html", form=form, posts=post_title)
 
