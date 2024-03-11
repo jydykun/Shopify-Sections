@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
     <form action="{{url_for('auth.post')}}" method="POST" novalidate>
         {{form.hidden_tag()}}
         {{form.post_title.label}}{{form.post_title}}
+        {{form.post_content.label}}{{form.post_content}}
         <button type="submit">Post</button>
     </form>
-
-</body>
-</html>
+{% endblock %}
