@@ -23,8 +23,5 @@ posts = [
 
 @bp.route("/")
 def index():
-    if 'username' in session:
-        test = session.items()
-        return render_template('index.html', posts=posts, test=type(test))
     return render_template('index.html', posts=posts)
 
