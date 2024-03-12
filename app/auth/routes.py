@@ -10,7 +10,9 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         username = form.username.data
+        passworld = form.password.data
         session['username'] = username
+        session['password'] = passworld
         return redirect(url_for('main.index'))
     return render_template('login.html', form=form)
 
