@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js" defer></script>
 
-
+{{ section.settings.bg_color.settings.background }}
 <!-- Slider main container -->
 <div
   class="swiper {{ section.settings.bg_color }}"
@@ -43,7 +43,6 @@
   const swiperEffect = el.dataset.swiperEffect;
   const swiperAutoplay = el.dataset.swiperAutoplay === 'true';
   const swiperAutoplayDelay = Number(el.dataset.swiperAutoplayDelay);
-  console.log(swiperAutoplayDelay)
 
   const swiper = new Swiper('.swiper', {
     direction: 'horizontal',
@@ -71,6 +70,12 @@
   "name": "Announcement Bar",
   "tag": "section",
   "settings": [
+    {
+      "type": "color_scheme",
+      "id": "bg_color",
+      "label": "Scheme",
+      "default": "scheme-4"
+    },
 
     {
       "type": "checkbox",
