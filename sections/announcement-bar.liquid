@@ -1,10 +1,10 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
-<script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js" defer></script>
-
-{{ section.settings.bg_color.settings.background }}
-<!-- Slider main container -->
+<!-- Swiper main container -->
 <div
-  class="swiper {{ section.settings.bg_color }}"
+  class="swiper announcement-bar"
+  style="
+    --text-color: {{ section.settings.scheme.settings.text }};
+    --bg-color: {{ section.settings.scheme.settings.background }};
+  "
   data-swiper-effect="{{ section.settings.announcement_effect }}"
   data-swiper-autoplay="{{ section.settings.enable_autoplay }}"
   data-swiper-autoplay-delay="{{ section.settings.autoplay_delay }}"
@@ -17,24 +17,36 @@
   </div>
 
   <!-- Navigation Buttons -->
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev announcement-button b"></div>
+  <div class="swiper-button-next announcement-button"></div>
 
 </div>
-
+{{ section.settings.scheme.settings.primary }}
 {% stylesheet %}
+  :root {
+    --announcement-bar-padding: 0.3rem;
+  }
   .b {
     border: 1px solid red;
   }
-  .swiper-bg {
-    background-color: var(--color-foreground);
-    color: var(--color-background);
-  }
-  .swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  .announcement-bar {
+    display: none;
+    padding-top: var(--announcement-bar-padding);
+    padding-bottom: var(--announcement-bar-padding);
     text-align: center;
+    color: var(--text-color);
+    background: var(--bg-color);
+  }
+  .announcement-button {
+    width: 0.5rem;
+    left: 200px;
+    color: var(--text-color);
+  }
+
+  @media (min-width: 768px) {
+    .announcement-bar {
+      display: block;
+    }
   }
 {% endstylesheet %}
 
@@ -72,9 +84,9 @@
   "settings": [
     {
       "type": "color_scheme",
-      "id": "bg_color",
+      "id": "scheme",
       "label": "Scheme",
-      "default": "scheme-4"
+      "default": "scheme-1"
     },
 
     {

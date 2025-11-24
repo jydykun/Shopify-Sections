@@ -8,17 +8,17 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
-    "name": "t:general.typography",
+    "name": "Typography",
     "settings": [
       {
         "type": "header",
-        "content": "t:general.fonts"
+        "content": "Font Family"
       },
       {
         "type": "font_picker",
         "id": "type_primary_font",
-        "default": "work_sans_n4",
-        "label": "t:general.primary"
+        "default": "noto_sans_n4",
+        "label": "Primary Font"
       }
     ]
   },
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "name": "Schemes",
+    "name": "Colors",
     "settings": [
       {
         "type": "color_scheme_group",
@@ -64,58 +64,52 @@
             "type": "color",
             "id": "background",
             "label": "Background",
-            "default": "#FFFFFF"
+            "default": "#ffffff"
           },
-          {
+           {
             "type": "color_background",
             "id": "background_gradient",
-            "label": "Background Gradient",
+            "label": "Background Gradient"
           },
           {
             "type": "color",
             "id": "text",
-            "label": "Text Color",
+            "label": "Text",
             "default": "#121212"
           },
           {
             "type": "color",
             "id": "button",
-            "label": "Button Color",
+            "label": "Button",
             "default": "#121212"
           },
           {
             "type": "color",
             "id": "button_label",
-            "label": "Button Label Color",
-            "default": "#FFFFFF"
-          },
-          {
-            "type": "color",
-            "id": "secondary_button_label",
-            "label": "Second Button Label Color",
+            "label": "Button Label",
             "default": "#121212"
           },
           {
             "type": "color",
-            "id": "shadow",
-            "label": "Shadow Color",
-            "default": "#121212"
-          }
+            "id": "button_outline",
+            "label": "Button Outline",
+            "default": "#ffffff"
+          },
         ],
         "role": {
           "text": "text",
-          "background": {
+          "background": {   
             "solid": "background",
             "gradient": "background_gradient"
           },
-          "links": "secondary_button_label",
+          "links": "text",
           "icons": "text",
           "primary_button": "button",
-          "on_primary_button": "button_label",
+          "on_primary_button": "button",
           "primary_button_border": "button",
           "secondary_button": "background",
-          "on_secondary_button": "secondary_button_label",
-          "secondary_button_border": "secondary_button_label"
+          "on_secondary_button": "background",
+          "secondary_button_border": "button_outline"
         }
       }
     ]

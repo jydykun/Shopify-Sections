@@ -1,26 +1,27 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
-    {% # Inlined CSS Variables %}
-    {% render 'css-variables' %}
-
-
-    {{ 'css/preflight.css' | asset_url | stylesheet_tag: preload: true }}
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
+
+    {% # Inlined CSS Variables %}
+    {% render 'css-variables' %}
+
+    {{ 'css/preflight.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'css/theme.css' | asset_url | stylesheet_tag }}
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
 
     {{ content_for_header }}
   </head>
 
   <body>
     {% sections 'header-group' %}
-
     {{ content_for_layout }}
 
     {% sections 'footer-group' %}
-  <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
   </body>
 </html>

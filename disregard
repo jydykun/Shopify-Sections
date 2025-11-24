@@ -1,0 +1,68 @@
+{
+    "name": "Schemes",
+    "settings": [
+      {
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "definition": [
+          {
+            "type": "color",
+            "id": "primary_color",
+            "label": "Primary Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "secondary_color",
+            "label": "Secondary Color",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "accent_color",
+            "label": "Accent Color",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "neutral_color",
+            "label": "Neutral Color",
+            "default": "#121212"
+          },
+          {
+            "type": "color",
+            "id": "light_color",
+            "label": "Light Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "dark_color",
+            "label": "Dark Color",
+            "default": "#000000"
+          },
+          {
+            "type": "color_background",
+            "id": "background_gradient",
+            "label": "Background Gradient"
+          },
+          
+        ],
+        "role": {
+          "text": "light_color",
+          "background": {   
+            "solid": "primary_color",
+            "gradient": "background_gradient"
+          },
+          "links": "primary_color",
+          "icons": "light_color",
+          "primary_button": "secondary_color",
+          "on_primary_button": "secondary_color",
+          "primary_button_border": "secondary_color",
+          "secondary_button": "accent_color",
+          "on_secondary_button": "accent_color",
+          "secondary_button_border": "accent_color"
+        }
+      }
+    ]
+  },
