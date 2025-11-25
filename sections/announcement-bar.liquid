@@ -1,45 +1,59 @@
-<!-- Swiper main container -->
-<div
-  class="swiper announcement-bar"
+{% comment %}
+  Announcement Bar Section
+  Displays an announcement bar with multiple messages that can slide or fade.
+
+  Requires Swiper.js for carousel functionality.
+  Make sure to include the following in your layout/theme.liquid file:
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js" defer></script>
+{% endcomment %}
+
+<div class="announcement-bar"
   style="
     --text-color: {{ section.settings.scheme.settings.text }};
     --bg-color: {{ section.settings.scheme.settings.background }};
   "
-  data-swiper-effect="{{ section.settings.announcement_effect }}"
-  data-swiper-autoplay="{{ section.settings.enable_autoplay }}"
-  data-swiper-autoplay-delay="{{ section.settings.autoplay_delay }}"
->
-  <div class="swiper-wrapper">
-    <!-- Slides -->
-    {% for block in section.blocks %}
-      <div class="swiper-slide">{{ block.settings.announcement_text }}</div>
-    {% endfor %}
+  >
+  <!-- Slider main container -->
+  <div
+    class="swiper"
+    style="--announcement-bar-padding: {{ section.settings.padding }}px;"
+    data-swiper-effect="{{ section.settings.announcement_effect }}"
+    data-swiper-autoplay="{{ section.settings.enable_autoplay }}"
+    data-swiper-autoplay-delay="{{ section.settings.autoplay_delay }}"
+    >
+
+    <div class="swiper-wrapper">
+      <!-- Slides -->
+      {% for block in section.blocks %}
+        <div class="swiper-slide">{{ block.settings.announcement_text }}</div>
+      {% endfor %}
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
   </div>
-
-  <!-- Navigation Buttons -->
-  <div class="swiper-button-prev announcement-button b"></div>
-  <div class="swiper-button-next announcement-button"></div>
-
 </div>
-{{ section.settings.scheme.settings.primary }}
+
 {% stylesheet %}
-  :root {
-    --announcement-bar-padding: 0.3rem;
-  }
-  .b {
-    border: 1px solid red;
-  }
+
   .announcement-bar {
     display: none;
-    padding-top: var(--announcement-bar-padding);
-    padding-bottom: var(--announcement-bar-padding);
-    text-align: center;
     color: var(--text-color);
     background: var(--bg-color);
   }
-  .announcement-button {
-    width: 0.5rem;
-    left: 200px;
+
+  .announcement-bar > .swiper {
+    width: 50%;
+    padding-top: var(--announcement-bar-padding);
+    padding-bottom: var(--announcement-bar-padding);
+    text-align: center;
+  }
+
+  .announcement-bar .swiper-button-prev,
+  .announcement-bar .swiper-button-next {
+    width: 0.4rem;
     color: var(--text-color);
   }
 
@@ -51,17 +65,23 @@
 {% endstylesheet %}
 
 {% javascript %}
-  const el = document.querySelector('.swiper');
+
+  const el = document.querySelector('.announcement-bar > .swiper');
   const swiperEffect = el.dataset.swiperEffect;
   const swiperAutoplay = el.dataset.swiperAutoplay === 'true';
   const swiperAutoplayDelay = Number(el.dataset.swiperAutoplayDelay);
-
-  const swiper = new Swiper('.swiper', {
+  
+  // BEGIN SWIPER INITIALIZATION
+  const swiper = new Swiper(el, {
     direction: 'horizontal',
     loop: true,
 
     // Autoplay
-    autoplay: swiperAutoplay ? { delay: swiperAutoplayDelay, disableOnInteraction: false } : false,
+    autoplay: swiperAutoplay ? {
+      delay: swiperAutoplayDelay,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    } : false,
 
     // Effect
     effect: swiperEffect, // 'slide' or 'fade'
@@ -75,6 +95,7 @@
       prevEl: '.swiper-button-prev',
     },
   });
+
 {% endjavascript %}
 
 {% schema %}
@@ -93,7 +114,8 @@
       "type": "checkbox",
       "id": "enable_autoplay",
       "label": "Autoplay",
-      "default": true
+      "default": true,
+      "info": "If disabled, navigation arrows will be shown."
     },
     {
       "type": "range",
@@ -119,18 +141,30 @@
           "label": "Fade"
         }
       ]
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding",
+      "default": 5,
+      "info": "Adjust the padding above and below the announcement text."
     }
   ],
   "blocks": [
     {
       "name": "Announcement Text",
       "type": "announcement-text",
+      "limit": 5,
       "settings": [
         {
           "type": "text",
           "id": "announcement_text",
           "label": "Text",
-          "default": "Free shipping on orders over $50!"
+          "default": "Annoucement Message Here"
         },
       ]
     }
