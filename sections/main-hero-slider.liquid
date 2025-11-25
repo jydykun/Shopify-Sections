@@ -1,0 +1,70 @@
+<div class="main-hero-slider">
+  <!-- Slider main container -->
+  <div class="swiper">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+      <!-- Slides -->
+      <div class="swiper-slide">
+        <div class="slide-content b">
+          {%  content_for 'blocks' %}
+        </div>
+      </div>
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .b {
+    border: 2px solid red;
+  }
+  .main-hero-slider > .swiper {
+    width: 100%;
+    height: 500px;
+  }
+  .main-hero-slider .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .main-hero-slider .slide-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+
+  const el = document.querySelector('.main-hero-slider > .swiper');
+  const swiperEffect = el.dataset.swiperEffect;
+  const swiperAutoplay = el.dataset.swiperAutoplay === 'true';
+  const swiperAutoplayDelay = Number(el.dataset.swiperAutoplayDelay);
+  
+  // BEGIN SWIPER INITIALIZATION
+  const heroSlider = new Swiper(el, {
+    direction: 'horizontal',
+    loop: true,
+    autoplay: true
+  });
+
+  heroSlider.disable(); // Start disabled
+
+
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Hero Slider",
+  "settings": [
+  ],
+  "blocks": [{"type": "text",}, {"type": "button"}],
+}
+{% endschema %}
+

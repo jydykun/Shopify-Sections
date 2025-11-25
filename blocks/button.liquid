@@ -1,0 +1,50 @@
+<button class="btn"
+    style="
+        --outline: {{ block.settings.outline_width }}px solid {{ block.settings.color_scheme.settings.button_outline }};
+        --text-color: {{ block.settings.color_scheme.settings.text }};
+        --bg-color: {{ block.settings.color_scheme.settings.background }};
+    ">
+    {{ block.settings.button_text}}
+</button>
+
+{% stylesheet %}
+  .btn {
+    width: 100%;
+    padding: 10px 20px;
+    outline: var(--outline);
+    border-radius: 5px;
+    background-color: var(--bg-color);
+    cursor: pointer;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+    "name": "Button Block",
+    "settings": [
+        {
+            "type": "color_scheme",
+            "id": "color_scheme",
+            "label": "Scheme"
+        },
+        {
+            "type": "text",
+            "id": "button_text",
+            "label": "Button Text",
+            "default": "Button"
+        },
+        {
+            "type": "range",
+            "id": "outline_width",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "unit": "px",
+            "default": 2,
+            "label": "Button Text",
+        }
+        
+    ],
+    "presets": [{"name": "Button Block"}]
+}
+{% endschema %}

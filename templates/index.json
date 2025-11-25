@@ -10,7 +10,7 @@
 {
   "sections": {
     "slider": {
-      "type": "main-slider",
+      "type": "main-hero-slider",
       "settings": {}
     }
   },

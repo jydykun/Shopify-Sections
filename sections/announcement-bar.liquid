@@ -10,10 +10,9 @@
 
 <div class="announcement-bar"
   style="
-    --text-color: {{ section.settings.scheme.settings.text }};
-    --bg-color: {{ section.settings.scheme.settings.background }};
-  "
-  >
+    --text-color: {{ section.settings.color_scheme.settings.text }};
+    --bg-color: {{ section.settings.color_scheme.settings.background }};
+  ">
   <!-- Slider main container -->
   <div
     class="swiper"
@@ -72,7 +71,7 @@
   const swiperAutoplayDelay = Number(el.dataset.swiperAutoplayDelay);
   
   // BEGIN SWIPER INITIALIZATION
-  const swiper = new Swiper(el, {
+  const announcementBarSlider = new Swiper(el, {
     direction: 'horizontal',
     loop: true,
 
@@ -95,6 +94,16 @@
       prevEl: '.swiper-button-prev',
     },
   });
+  
+  // Enable/disable based on viewport width
+  if (window.innerWidth >= 768) {
+    announcementBarSlider.enable()
+    announcementBarSlider.init();
+
+  } else {
+    announcementBarSlider.disable()
+    announcementBarSlider.destroy();
+  }
 
 {% endjavascript %}
 
@@ -105,7 +114,7 @@
   "settings": [
     {
       "type": "color_scheme",
-      "id": "scheme",
+      "id": "color_scheme",
       "label": "Scheme",
       "default": "scheme-1"
     },
