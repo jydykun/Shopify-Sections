@@ -1,28 +1,30 @@
-<button class="btn"
+<button class="btn b"
     style="
+        --width:{{ block.settings.button_width }}%;
         --padding-x:{{ block.settings.padding_horizontal }}px;
         --padding-y:{{ block.settings.padding_vertical }}px;
         {%- if block.settings.show_outline %}
             --border-width:{{ block.settings.border_width }}px;
             --border-color:{{ block.settings.color_scheme.settings.button_outline }};
-            --border-radius:{{ block.settings.border_radius }}px;
         {% endif -%}
-        --text-color:{{ block.settings.color_scheme.settings.text }};
-        --bg-color:{{ block.settings.color_scheme.settings.background }};
+        --border-radius:{{ block.settings.border_radius }}px;
+        --text-color:{{ block.settings.color_scheme.settings.button_label }};
+        --bg-color:{{ block.settings.color_scheme.settings.button }};
     ">
-    {{ block.settings.button_text}}
+    {{ block.settings.button_label}}
 </button>
 
 {% stylesheet %}
-  .btn {
-    padding: var(--padding-y) var(--padding-x);
-    border: var(--border-width) solid var(--border-color);
-    border-radius: var(--border-radius);
-    background-color: var(--bg-color);
-    cursor: pointer;
-  }
-  .btn--rounded {
-    border-radius: 30px;
+    .b {
+        border: 1px solid red;
+    }
+    .btn {
+        padding: var(--padding-y) var(--padding-x);
+        color: var(--text-color);
+        border: var(--border-width) solid var(--border-color);
+        border-radius: var(--border-radius);
+        background-color: var(--bg-color);
+        cursor: pointer;
   }
 {% endstylesheet %}
 
@@ -36,9 +38,9 @@
             "label": "Scheme"
         },
         {
-            "type": "text",
-            "id": "button_text",
-            "label": "Button Text",
+            "type": "inline_richtext",
+            "id": "button_label",
+            "label": "Button Label",
             "default": "Button"
         },
         {
@@ -52,17 +54,17 @@
             "max": 30,
             "step": 1,
             "unit": "px",
-            "default": 10,
+            "default": 15,
             "label": "Vertical",
         },
         {
             "type": "range",
             "id": "padding_horizontal",
             "min": 5,
-            "max": 30,
+            "max": 100,
             "step": 1,
             "unit": "px",
-            "default": 20,
+            "default": 25,
             "label": "Horizontal",
         },
         {
