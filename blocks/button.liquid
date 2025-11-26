@@ -1,20 +1,28 @@
 <button class="btn"
     style="
-        --outline: {{ block.settings.outline_width }}px solid {{ block.settings.color_scheme.settings.button_outline }};
-        --text-color: {{ block.settings.color_scheme.settings.text }};
-        --bg-color: {{ block.settings.color_scheme.settings.background }};
+        --padding-x:{{ block.settings.padding_horizontal }}px;
+        --padding-y:{{ block.settings.padding_vertical }}px;
+        {%- if block.settings.show_outline %}
+            --border-width:{{ block.settings.border_width }}px;
+            --border-color:{{ block.settings.color_scheme.settings.button_outline }};
+            --border-radius:{{ block.settings.border_radius }}px;
+        {% endif -%}
+        --text-color:{{ block.settings.color_scheme.settings.text }};
+        --bg-color:{{ block.settings.color_scheme.settings.background }};
     ">
     {{ block.settings.button_text}}
 </button>
 
 {% stylesheet %}
   .btn {
-    width: 100%;
-    padding: 10px 20px;
-    outline: var(--outline);
-    border-radius: 5px;
+    padding: var(--padding-y) var(--padding-x);
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--border-radius);
     background-color: var(--bg-color);
     cursor: pointer;
+  }
+  .btn--rounded {
+    border-radius: 30px;
   }
 {% endstylesheet %}
 
@@ -34,14 +42,57 @@
             "default": "Button"
         },
         {
+            "type": "header",
+            "content": "Padding"
+        },
+        {
             "type": "range",
-            "id": "outline_width",
+            "id": "padding_vertical",
+            "min": 5,
+            "max": 30,
+            "step": 1,
+            "unit": "px",
+            "default": 10,
+            "label": "Vertical",
+        },
+        {
+            "type": "range",
+            "id": "padding_horizontal",
+            "min": 5,
+            "max": 30,
+            "step": 1,
+            "unit": "px",
+            "default": 20,
+            "label": "Horizontal",
+        },
+        {
+            "type": "header",
+            "content": "Border"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_outline",
+            "label": "Show Border"
+        },
+        {
+            "type": "range",
+            "id": "border_width",
             "min": 1,
             "max": 5,
             "step": 1,
             "unit": "px",
             "default": 2,
-            "label": "Button Text",
+            "label": "Border Width",
+        },
+        {
+            "type": "range",
+            "id": "border_radius",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "%",
+            "default": 5,
+            "label": "Border Radius",
         }
         
     ],

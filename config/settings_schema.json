@@ -87,13 +87,13 @@
             "type": "color",
             "id": "button_label",
             "label": "Button Label",
-            "default": "#121212"
+            "default": "#ffffff"
           },
           {
             "type": "color",
             "id": "button_outline",
             "label": "Button Outline",
-            "default": "#ffffff"
+            "default": "#121212"
           },
         ],
         "role": {
