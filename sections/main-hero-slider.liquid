@@ -1,15 +1,14 @@
-<div class="main-hero-slider">
+<div class="mh-slider">
   <!-- Slider main container -->
   <div class="swiper">
     <!-- Additional required wrapper -->
     <div class="swiper-wrapper">
       <!-- Slides -->
-      <div class="swiper-slide">
-        <div class="slide-content">
-          <p class="b">Content 1</p>
-          <p class="b">Content 1dasdasdasdasdad</p>
-          <p class="b">Content 1</p>
-          {%  content_for 'blocks' %}
+      <div class="swiper-slide mh-slider__slide {{ section.settings.slide_alignment }} b">
+        <div class="mh-slider__content {{ section.settings.content_alignment }} b">
+          <p class="b">HEADING</p>
+          <p class="b">DESCRIPTION</p>
+          {% content_for 'blocks' %}
         </div>
       </div>
     </div>
@@ -27,26 +26,48 @@
   .b {
     border: 2px solid red;
   }
-  .main-hero-slider > .swiper {
+  .mh-slider > .swiper {
     width: 100%;
     height: 500px;
   }
-  .main-hero-slider .swiper-slide {
+  .mh-slider__slide {
+    padding: 0 10%;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
   }
-  .main-hero-slider .slide-content {
+  /* .mh-slider__slide MODIFIER */
+  .mh-slider__slide--default {
+    justify-content: start;
+  }
+  .mh-slider__slide--center {
+    justify-content: center;
+  }
+  .mh-slider__slide--right {
+    justify-content: end;
+  }
+  .mh-slider__content {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 1rem;
   }
+   /* .mh-slider__content MODIFIER */
+  .mh-slider__content--default {
+    align-items: start;
+  }
+  .mh-slider__content--center {
+    align-items: center;
+  }
+  .mh-slider__content--right {
+    align-items: end;
+  }
+  
+
 {% endstylesheet %}
 
 {% javascript %}
 
-  const el = document.querySelector('.main-hero-slider > .swiper');
+  const el = document.querySelector('.mh-slider > .swiper');
   const swiperEffect = el.dataset.swiperEffect;
   const swiperAutoplay = el.dataset.swiperAutoplay === 'true';
   const swiperAutoplayDelay = Number(el.dataset.swiperAutoplayDelay);
@@ -67,6 +88,46 @@
 {
   "name": "Hero Slider",
   "settings": [
+    {
+      "type": "select",
+      "id": "slide_alignment",
+      "label": "Slide Alignment",
+      "options": [
+        {
+          "value": "mh-slider__slide--default",
+          "label": "Left"
+        },
+        {
+          "value": "mh-slider__slide--center",
+          "label": "Center"
+        },
+        {
+          "value": "mh-slider__slide--right",
+          "label": "Right"
+        }
+      ],
+      "default": "mh-slider__slide--default"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content Alignment",
+      "options": [
+        {
+          "value": "mh-slider__content--default",
+          "label": "Left"
+        },
+        {
+          "value": "mh-slider__content--center",
+          "label": "Center"
+        },
+        {
+          "value": "mh-slider__content--right",
+          "label": "Right"
+        }
+      ],
+      "default": "mh-slider__content--default"
+    }
   ],
   "blocks": [{"type": "text",}, {"type": "button"}],
 }

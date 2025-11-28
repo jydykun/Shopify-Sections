@@ -1,12 +1,10 @@
-<button class="btn b"
+<button class="mh-slider__btn b"
     style="
         --width:{{ block.settings.button_width }}%;
         --padding-x:{{ block.settings.padding_horizontal }}px;
         --padding-y:{{ block.settings.padding_vertical }}px;
-        {%- if block.settings.show_outline %}
-            --border-width:{{ block.settings.border_width }}px;
-            --border-color:{{ block.settings.color_scheme.settings.button_outline }};
-        {% endif -%}
+        --border-width:{{ block.settings.border_width }}px;
+        --border-color:{{ block.settings.color_scheme.settings.button_outline }};
         --border-radius:{{ block.settings.border_radius }}px;
         --text-color:{{ block.settings.color_scheme.settings.button_label }};
         --bg-color:{{ block.settings.color_scheme.settings.button }};
@@ -18,14 +16,17 @@
     .b {
         border: 1px solid red;
     }
-    .btn {
+    .mh-slider__btn {
         padding: var(--padding-y) var(--padding-x);
         color: var(--text-color);
         border: var(--border-width) solid var(--border-color);
         border-radius: var(--border-radius);
         background-color: var(--bg-color);
         cursor: pointer;
-  }
+        &:hover {
+            background-color: red;
+        }
+    }
 {% endstylesheet %}
 
 {% schema %}
@@ -70,11 +71,6 @@
         {
             "type": "header",
             "content": "Border"
-        },
-        {
-            "type": "checkbox",
-            "id": "show_outline",
-            "label": "Show Border"
         },
         {
             "type": "range",
