@@ -61,57 +61,91 @@
         "id": "color_schemes",
         "definition": [
           {
-            "type": "color",
-            "id": "background",
-            "label": "Background",
-            "default": "#ffffff"
+            "type": "header",
+            "content": "Theme"
           },
-           {
+          {
+            "type": "color",
+            "id": "primary_color",
+            "label": "Primary",
+          },
+          {
+            "type": "color",
+            "id": "secondary_color",
+            "label": "Secondary",
+          },
+          {
+            "type": "color",
+            "id": "accent_color",
+            "label": "Accent",
+          },
+          {
+            "type": "color",
+            "id": "additional_color",
+            "label": "Additional",
+          },
+          {
+            "type": "color",
+            "id": "dark_color",
+            "label": "Dark",
+          },
+          {
+            "type": "color",
+            "id": "light_color",
+            "label": "Light",
+          },
+          {
+            "type": "header",
+            "content": "Button"
+          },
+          {
+            "type": "color",
+            "id": "button_bg_color",
+            "label": "Background",
+          },
+          {
             "type": "color_background",
-            "id": "background_gradient",
+            "id": "button_bg_gradient",
             "label": "Background Gradient"
           },
           {
             "type": "color",
-            "id": "text",
-            "label": "Text",
-            "default": "#121212"
-          },
-          {
-            "type": "color",
-            "id": "button",
-            "label": "Button",
-            "default": "#121212"
-          },
-          {
-            "type": "color",
             "id": "button_label",
-            "label": "Button Label",
-            "default": "#ffffff"
+            "label": "Label",
           },
           {
             "type": "color",
-            "id": "button_outline",
-            "label": "Button Outline",
-            "default": "#121212"
+            "id": "border_color",
+            "label": "Border",
+          },
+          {
+            "type": "color",
+            "id": "hover_bg_color",
+            "label": "Hover Background",
+          },
+          {
+            "type": "color",
+            "id": "hover_label_color",
+            "label": "Hover Label",
           },
         ],
         "role": {
-          "text": "text",
+          "text": "button_label",
           "background": {   
-            "solid": "background",
-            "gradient": "background_gradient"
+            "solid": "primary_color",
+            "gradient": "button_bg_gradient"
           },
-          "links": "text",
-          "icons": "text",
-          "primary_button": "button",
-          "on_primary_button": "button",
-          "primary_button_border": "button",
-          "secondary_button": "background",
-          "on_secondary_button": "background",
-          "secondary_button_border": "button_outline"
+          "links": "dark_color",
+          "icons": "dark_color",
+          "primary_button": "button_bg_color",
+          "on_primary_button": "button_bg_color",
+          "primary_button_border": "border_color",
+          "secondary_button": "hover_bg_color",
+          "on_secondary_button": "hover_bg_color",
+          "secondary_button_border": "hover_label_color"
         }
-      }
+      },
+      
     ]
   },
 ]

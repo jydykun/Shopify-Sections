@@ -1,0 +1,30 @@
+<div class="mh-slider__btn-group" style="--btn-group-gap:{{ block.settings.btn-group-gap }}px">
+    {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+    .mh-slider__btn-group {
+        display: flex;
+        gap: var(--btn-group-gap);
+    }
+{% endstylesheet %}
+
+{% schema %}
+{
+    "name": "Button Group",
+    "settings": [
+        {
+            "type": "range",
+            "id": "btn-group-gap",
+            "min": 5,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "default": 16,
+            "label": "Gap",
+        }
+    ],
+    "blocks": [{"type": "button"}],
+    "presets": [{"name": "Button Group"}]
+}
+{% endschema %}

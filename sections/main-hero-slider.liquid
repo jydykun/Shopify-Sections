@@ -2,15 +2,9 @@
   <!-- Slider main container -->
   <div class="swiper">
     <!-- Additional required wrapper -->
-    <div class="swiper-wrapper">
+    <div class="swiper-wrapper b">
       <!-- Slides -->
-      <div class="swiper-slide mh-slider__slide {{ section.settings.slide_alignment }} b">
-        <div class="mh-slider__content {{ section.settings.content_alignment }} b">
-          <p class="b">HEADING</p>
-          <p class="b">DESCRIPTION</p>
-          {% content_for 'blocks' %}
-        </div>
-      </div>
+      {% content_for 'blocks' %}
     </div>
     <!-- If we need pagination -->
     <div class="swiper-pagination"></div>
@@ -30,39 +24,6 @@
     width: 100%;
     height: 500px;
   }
-  .mh-slider__slide {
-    padding: 0 10%;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-  }
-  /* .mh-slider__slide MODIFIER */
-  .mh-slider__slide--default {
-    justify-content: start;
-  }
-  .mh-slider__slide--center {
-    justify-content: center;
-  }
-  .mh-slider__slide--right {
-    justify-content: end;
-  }
-  .mh-slider__content {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-   /* .mh-slider__content MODIFIER */
-  .mh-slider__content--default {
-    align-items: start;
-  }
-  .mh-slider__content--center {
-    align-items: center;
-  }
-  .mh-slider__content--right {
-    align-items: end;
-  }
-  
-
 {% endstylesheet %}
 
 {% javascript %}
@@ -87,49 +48,7 @@
 {% schema %}
 {
   "name": "Hero Slider",
-  "settings": [
-    {
-      "type": "select",
-      "id": "slide_alignment",
-      "label": "Slide Alignment",
-      "options": [
-        {
-          "value": "mh-slider__slide--default",
-          "label": "Left"
-        },
-        {
-          "value": "mh-slider__slide--center",
-          "label": "Center"
-        },
-        {
-          "value": "mh-slider__slide--right",
-          "label": "Right"
-        }
-      ],
-      "default": "mh-slider__slide--default"
-    },
-    {
-      "type": "select",
-      "id": "content_alignment",
-      "label": "Content Alignment",
-      "options": [
-        {
-          "value": "mh-slider__content--default",
-          "label": "Left"
-        },
-        {
-          "value": "mh-slider__content--center",
-          "label": "Center"
-        },
-        {
-          "value": "mh-slider__content--right",
-          "label": "Right"
-        }
-      ],
-      "default": "mh-slider__content--default"
-    }
-  ],
-  "blocks": [{"type": "text",}, {"type": "button"}],
+  "blocks": [{"type": "slide"}],
 }
 {% endschema %}
 

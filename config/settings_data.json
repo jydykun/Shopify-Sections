@@ -12,24 +12,9 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          "background": "#ffffff",
-          "background_gradient": "",
-          "text": "#121212",
-          "button": "#121212",
-          "button_label": "#ffffff",
-          "button_outline": "#121212"
+          
         }
-      },
-      "scheme-2": {
-        "settings": {
-          "background": "##121212",
-          "background_gradient": "",
-          "text": "#ffffff",
-          "button": "#ffffff",
-          "button_label": "#121212",
-          "button_outline": "#ffffff"
-        }
-      },
+      }
     }
   }
 }
