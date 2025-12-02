@@ -1,34 +1,29 @@
-<div class="mh-slider">
-  <!-- Slider main container -->
-  <div class="swiper">
-    <!-- Additional required wrapper -->
-    <div class="swiper-wrapper b">
-      <!-- Slides -->
-      {% content_for 'blocks' %}
-    </div>
-    <!-- If we need pagination -->
-    <div class="swiper-pagination"></div>
-
-    <!-- If we need navigation buttons -->
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-
+<section class="swiper mh-slider">
+  <div class="swiper-wrapper mh-slider__wrapper">
+    {% content_for 'blocks' %}
   </div>
-</div>
+  
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+</section>
+
 
 {% stylesheet %}
+  .shopify-block {
+    border: 1px solid darkgreen;
+  }
   .b {
     border: 2px solid red;
   }
-  .mh-slider > .swiper {
+  .mh-slider {
     width: 100%;
-    height: 500px;
+    height: 31.25rem;
   }
 {% endstylesheet %}
 
 {% javascript %}
 
-  const el = document.querySelector('.mh-slider > .swiper');
+  const el = document.querySelector('.mh-slider');
   const swiperEffect = el.dataset.swiperEffect;
   const swiperAutoplay = el.dataset.swiperAutoplay === 'true';
   const swiperAutoplayDelay = Number(el.dataset.swiperAutoplayDelay);
@@ -37,10 +32,14 @@
   const heroSlider = new Swiper(el, {
     direction: 'horizontal',
     loop: true,
-    autoplay: true
+    autoplay: true,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
   });
 
-  heroSlider.disable(); // Start disabled
+  //heroSlider.disable(); // Start disabled
 
 
 {% endjavascript %}

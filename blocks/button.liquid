@@ -1,6 +1,6 @@
-<button class="mh-slider__btn"
+<!--BUTTON BLOCK-->
+<button class="btn"
     style="
-    --width:{{ block.settings.button_width }}%;
     --padding-x:{{ block.settings.padding_horizontal }}px;
     --padding-y:{{ block.settings.padding_vertical }}px;
     --border-width:{{ block.settings.border_width }}px;
@@ -15,25 +15,27 @@
         {% endif %}
     --hover-bg-color:{{ block.settings.color_scheme.settings.hover_bg_color }};
     --hover-label-color:{{ block.settings.color_scheme.settings.hover_label_color }};
-    ">
+    "
+    {{ block.shopify_attributes }}>
     {{ block.settings.button_label}}
 </button>
 
 {% stylesheet %}
-    .mh-slider__btn {
-        padding: var(--padding-y) var(--padding-x);
-        color: var(--label-color);
-        border: var(--border-width) solid var(--border-color);
-        border-radius: var(--border-radius);
-        background: var(--bg-color);
-        cursor: pointer;
-        &:hover {
-            color: var(--hover-label-color);
-            background-color: var(--hover-bg-color);
-        }
-        transition: all 0.3s ease-in-out;
+.btn {
+    padding: var(--padding-y) var(--padding-x);
+    color: var(--label-color);
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--bg-color);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        color: var(--hover-label-color);
+        background-color: var(--hover-bg-color);
     }
+}
 {% endstylesheet %}
+
 
 {% schema %}
 {

@@ -10,9 +10,11 @@
   style="--text-align: {{ block.settings.alignment }}"
   {{ block.shopify_attributes }}
 >
+    {{ block.shopify_attributes }}
   {{ block.settings.text }}
 </div>
-
+{% comment %}
+  
 {% stylesheet %}
   .text {
     text-align: var(--text-align);
@@ -25,6 +27,7 @@
     font-size: 1.5rem;
   }
 {% endstylesheet %}
+ {% endcomment %}
 
 {% schema %}
 {

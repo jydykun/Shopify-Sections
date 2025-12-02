@@ -1,0 +1,54 @@
+<div class="mh-slider">
+  <!-- Slider main container -->
+  <div class="swiper">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper b">
+      <!-- Slides -->
+      {% content_for 'blocks' %}
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  .b {
+    border: 2px solid red;
+  }
+  .mh-slider > .swiper {
+    width: 100%;
+    height: 500px;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+
+  const el = document.querySelector('.mh-slider > .swiper');
+  const swiperEffect = el.dataset.swiperEffect;
+  const swiperAutoplay = el.dataset.swiperAutoplay === 'true';
+  const swiperAutoplayDelay = Number(el.dataset.swiperAutoplayDelay);
+  
+  // BEGIN SWIPER INITIALIZATION
+  const heroSlider = new Swiper(el, {
+    direction: 'horizontal',
+    loop: true,
+    autoplay: true
+  });
+
+  heroSlider.disable(); // Start disabled
+
+
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Hero Slider",
+  "blocks": [{"type": "slide"}],
+}
+{% endschema %}
+
