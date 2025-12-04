@@ -1,3 +1,12 @@
 body {
     font-family: var(--font-primary--family);
 }
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.container-fw {
+    width: 100%;
+}

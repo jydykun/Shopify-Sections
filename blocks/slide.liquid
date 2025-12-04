@@ -1,33 +1,66 @@
 <!--SLIDE BLOCK-->
-<div class="mh-slider__slide {{ block.settings.position }}" {{ block.shopify_attributes }}>
-    <div class="mh-slider__content mh-slider__content--{{ block.settings.content_alignment }}">
+<div class="mh-slider__slide b {{ block.settings.position }}"
+    style="
+    --padding-x:{{ block.settings.padding_x }}px;
+    --line-height:{{ block.settings.spacing }}px;
+    "
+    {{ block.shopify_attributes }}
+    >
+    {{ block.settings.bg_image | image_url: width: 1000 | image_tag: class: 'mh-slider_bg-image' }}
+    <article class="mh-slider__content mh-slider__content--{{ block.settings.content_alignment }}">
+        <p class="mh-slider__subtitle">{{ block.settings.subtitle }}</p>
+        <h2 class="mh-slider__title">{{ block.settings.title }}</h2>
+        <p class="mh-slider__description">{{ block.settings.description }}</p>
         {% content_for 'blocks' %}
-    </div>
+    </article>
 </div>
 {% stylesheet %}
 .mh-slider__slide {
-    height: inherit;
+    position: relative;
+    height: 500px;
     padding: 0 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+.mh-slider_bg-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    object-fit: cover;
+    object-position: center center;
+}
 .mh-slider__content {
     display: flex;
     flex-direction: column;
     align-items: start;
-    gap: 1rem;
+    gap: var(--line-height);
+}
+.mh-slider__subtitle,
+.mh-slider__title,
+.mh-slider__description {
+    line-height:80%;
+}
+.mh-slider__title {
+    font-size: 50pt;
 }
 .mh-slider__content--left {
+    text-align: left;
     align-items: start;
 }
 .mh-slider__content--center {
+    text-align: center;
     align-items: center;
 }
 .mh-slider__content--right {
+    text-align: right;
     align-items: end;
 }
 @media (min-width: 768px) {
+    .mh-slider__slide {
+        padding: 0 var(--padding-x);
+    }
     .mh-slider__slide--left {
         justify-content: start;
     }
@@ -45,6 +78,29 @@
     "name": "Slide",
     "class": "swiper-slide",
     "settings": [
+        {
+            "type": "inline_richtext",
+            "id": "subtitle",
+            "label": "Subtitle",
+            "default": "Subtitle"
+        },
+        {
+            "type": "inline_richtext",
+            "id": "title",
+            "label": "Title",
+            "default": "Title"
+        },
+        {
+            "type": "inline_richtext",
+            "id": "description",
+            "label": "Description",
+            "default": "Description"
+        },
+        {
+            "type": "image_picker",
+            "id": "bg_image",
+            "label": "Background Image"
+        },
         {
         "type": "select",
         "id": "position",
@@ -71,6 +127,26 @@
             "id": "content_alignment",
             "label": "Content Alignment",
             "default": "left"
+        },
+        {
+            "type": "range",
+            "id": "spacing",
+            "min": 1,
+            "max": 50,
+            "step": 1,
+            "unit": "px",
+            "default": 25,
+            "label": "Spacing",
+        },
+        {
+            "type": "range",
+            "id": "padding_x",
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "default": 40,
+            "label": "Padding",
         },
     ],
     "blocks": [{"type": "text"},{"type": "button"},{"type": "button-group"}],
