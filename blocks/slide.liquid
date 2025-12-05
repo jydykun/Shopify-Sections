@@ -6,18 +6,17 @@
     "
     {{ block.shopify_attributes }}
     >
-    {{ block.settings.bg_image | image_url: width: 1000 | image_tag: class: 'mh-slider_bg-image' }}
-    <article class="mh-slider__content mh-slider__content--{{ block.settings.content_alignment }}">
-        <p class="mh-slider__subtitle">{{ block.settings.subtitle }}</p>
-        <h2 class="mh-slider__title">{{ block.settings.title }}</h2>
-        <p class="mh-slider__description">{{ block.settings.description }}</p>
+    {% if block.settings.bg_image != blank %}
+        {{ block.settings.bg_image | image_url: width: 1280| image_tag: class: 'mh-slider_bg-image' }}
+    {% endif %}
+    <article class="mh-slider__content mh-slider__content--{{ block.settings.content_alignment }} b">
         {% content_for 'blocks' %}
     </article>
 </div>
 {% stylesheet %}
 .mh-slider__slide {
     position: relative;
-    height: 500px;
+    height: inherit;
     padding: 0 2.5rem;
     display: flex;
     justify-content: center;
@@ -36,14 +35,6 @@
     flex-direction: column;
     align-items: start;
     gap: var(--line-height);
-}
-.mh-slider__subtitle,
-.mh-slider__title,
-.mh-slider__description {
-    line-height:80%;
-}
-.mh-slider__title {
-    font-size: 50pt;
 }
 .mh-slider__content--left {
     text-align: left;
@@ -78,24 +69,6 @@
     "name": "Slide",
     "class": "swiper-slide",
     "settings": [
-        {
-            "type": "inline_richtext",
-            "id": "subtitle",
-            "label": "Subtitle",
-            "default": "Subtitle"
-        },
-        {
-            "type": "inline_richtext",
-            "id": "title",
-            "label": "Title",
-            "default": "Title"
-        },
-        {
-            "type": "inline_richtext",
-            "id": "description",
-            "label": "Description",
-            "default": "Description"
-        },
         {
             "type": "image_picker",
             "id": "bg_image",
