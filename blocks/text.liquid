@@ -2,16 +2,21 @@
 <div class="text b"
   style="
   --font-size:{{ block.settings.font_size }}pt;
+  --leading:{{ block.settings.leading }}pt;
+  --tracking:{{ block.settings.tracking }}pt;
   "
   {{ block.shopify_attributes }}
   >
   {{ block.settings.text }}
+  {{ block.settings.font.family }}
+  {{ block.settings.font.weight }}
 </div>
 
 {% stylesheet %}
 .text {
-  width: 200px;
   font-size: var(--font-size);
+  line-height: var(--leading);
+  letter-spacing: var(--tracking);
   overflow-wrap: break-word;
 }
 
@@ -22,20 +27,48 @@
 {
   "name": "Text",
   "settings": [
+    
     {
       "type": "richtext",
       "id": "text",
-      "label": "Content"
+      "label": "Content",
+      "default": "<p>Your text here</p>"
+    },
+    {
+      "type": "font_picker",
+      "id": "font",
+      "label": "Font",
+      "default": "montserrat_n4"
     },
     {
       "type": "range",
       "id": "font_size",
-      "min": 8,
+      "min": 10,
       "max": 100,
       "step": 1,
       "unit": "pt",
-      "default": 25,
+      "default": 12,
       "label": "Size",
+    },
+    {
+      "type": "range",
+      "id": "leading",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "pt",
+      "default": 12,
+      "label": "Leading",
+    },
+    {
+      "type": "range",
+      "id": "tracking",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "unit": "pt",
+      "default": 0,
+      "label": "Tracking",
     },
   ],
   "presets": [{"name": "Text"}]
