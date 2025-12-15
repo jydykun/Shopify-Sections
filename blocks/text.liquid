@@ -8,10 +8,11 @@
 {% style %}
   {{ block.settings.font | font_face }}
   #block-{{ block.id }} {
+
     --font-family: {{ block.settings.font.family }}, {{ block.settings.font.fallback_families }};
     --font-style: {{ block.settings.font.style }};
+    --font-size: {{  block.settings.font_size }}pt;
     --font-weight: {{ block.settings.font.weight }};
-    --font-size: {{ block.settings.font_size }}pt;
     --leading: {{ block.settings.leading }}pt;
     --tracking: {{ block.settings.tracking }}pt;
   }
