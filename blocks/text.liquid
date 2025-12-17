@@ -1,30 +1,64 @@
 <!--TEXT BLOCK-->
-<div id="block-{{ block.id }}" class="text b" {{ block.shopify_attributes }}>
+<div id="block-{{ block.id }}" class="block-text b" {{ block.shopify_attributes }}>
   {{ block.settings.text }}
-  {{ block.settings.font | font_face}}
-  {{ block.id }}
 </div>
 
 {% style %}
-  {{ block.settings.font | font_face }}
-  #block-{{ block.id }} {
+  {{ block.settings.font | font_face: font_display: 'swap' }}
 
+  #block-{{ block.id }} {
     --font-family: {{ block.settings.font.family }}, {{ block.settings.font.fallback_families }};
     --font-style: {{ block.settings.font.style }};
-    --font-size: {{  block.settings.font_size }}pt;
+    --font-size: {{  block.settings.font_size | divided_by: 16 }}rem;
     --font-weight: {{ block.settings.font.weight }};
-    --leading: {{ block.settings.leading }}pt;
-    --tracking: {{ block.settings.tracking }}pt;
+    --leading: {{ block.settings.leading }}px;
+    --tracking: {{ block.settings.tracking }}px;
+    --spacing: {{ block.settings.spacing | divided_by: 16 }}rem;
   }
 {% endstyle %}
 
 {% stylesheet %}
-.text {
+.block-text {
   font-family: var(--font-family);
+  font-style: var(--font-style);
   font-size: var(--font-size);
+  font-weight: var(--font-weight);
   line-height: var(--leading);
   letter-spacing: var(--tracking);
   overflow-wrap: break-word;
+}
+
+.block-text a {
+  text-decoration: underline;
+  color: blue;
+}
+
+.block-text ul {
+  list-style-type: disc;
+}
+
+.block-text ol {
+  list-style-type: decimal;
+}
+
+.block-text p,
+.block-text ul,
+.block-text ol {
+  margin-bottom: var(--spacing);
+}
+
+.block-text p,
+.block-text ul,
+.block-text ol {
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.block-text ul,
+.block-text ol {
+  margin-left: 2.5rem;
+  border: 1px solid red;
 }
 
 {% endstylesheet %}
@@ -39,7 +73,7 @@
       "type": "richtext",
       "id": "text",
       "label": "Content",
-      "default": "<p>Your text here</p>"
+      "default": "<p>Your Text Here</p>"
     },
     {
       "type": "font_picker",
@@ -53,8 +87,8 @@
       "min": 10,
       "max": 100,
       "step": 1,
-      "unit": "pt",
-      "default": 12,
+      "unit": "px",
+      "default": 16,
       "label": "Size",
     },
     {
@@ -63,8 +97,8 @@
       "min": 10,
       "max": 100,
       "step": 1,
-      "unit": "pt",
-      "default": 12,
+      "unit": "px",
+      "default": 24,
       "label": "Leading",
     },
     {
@@ -73,9 +107,20 @@
       "min": 0,
       "max": 10,
       "step": 1,
-      "unit": "pt",
+      "unit": "px",
       "default": 0,
       "label": "Tracking",
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "label": "Spacing",
+      "info": "Spacing between elements."
     },
   ],
   "presets": [{"name": "Text"}]
