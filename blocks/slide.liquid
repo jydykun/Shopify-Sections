@@ -1,5 +1,5 @@
 <!--SLIDE BLOCK-->
-<div class="mh-slider__slide b {{ block.settings.position }}"
+<div class="mh-slider__slide {{ block.settings.position }}"
     style="
     --padding-x:{{ block.settings.padding_x }}px;
     --line-height:{{ block.settings.spacing }}px;
@@ -9,7 +9,7 @@
     {% if block.settings.bg_image != blank %}
         {{ block.settings.bg_image | image_url: width: 1280| image_tag: class: 'mh-slider_bg-image' }}
     {% endif %}
-    <article class="mh-slider__content mh-slider__content--{{ block.settings.content_alignment }} b">
+    <article class="mh-slider__content mh-slider__content--{{ block.settings.content_alignment }}">
         {% content_for 'blocks' %}
     </article>
 </div>
@@ -127,7 +127,25 @@
     "presets": [
         {
             "name": "Slide",
-            "blocks": [{"type": "text"}, {"type": "text"}, {"type": "button"}]
+            "blocks": [
+                {
+                    "type": "text",
+                    "settings": {
+                        "text": "<h2>Slide Title</h2>",
+                        "font_size": 32,
+                        "leading": 40,
+                    }
+                },
+                {
+                    "type": "text",
+                    "settings": {
+                        "text": "<p>Slide Description</p>",
+                    }
+                },
+                {
+                    "type": "button"
+                },
+            ]
         }
     ]
 }

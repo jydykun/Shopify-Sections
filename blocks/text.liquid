@@ -1,5 +1,5 @@
 <!--TEXT BLOCK-->
-<div id="block-{{ block.id }}" class="block-text b" {{ block.shopify_attributes }}>
+<div id="block-{{ block.id }}" class="block-text" {{ block.shopify_attributes }}>
   {{ block.settings.text }}
 </div>
 
@@ -13,7 +13,6 @@
     --font-weight: {{ block.settings.font.weight }};
     --leading: {{ block.settings.leading }}px;
     --tracking: {{ block.settings.tracking }}px;
-    --spacing: {{ block.settings.spacing | divided_by: 16 }}rem;
   }
 {% endstyle %}
 
@@ -39,12 +38,6 @@
 
 .block-text ol {
   list-style-type: decimal;
-}
-
-.block-text p,
-.block-text ul,
-.block-text ol {
-  margin-bottom: var(--spacing);
 }
 
 .block-text p,
@@ -110,18 +103,7 @@
       "unit": "px",
       "default": 0,
       "label": "Tracking",
-    },
-    {
-      "type": "range",
-      "id": "spacing",
-      "min": 0,
-      "max": 30,
-      "step": 1,
-      "unit": "px",
-      "default": 16,
-      "label": "Spacing",
-      "info": "Spacing between elements."
-    },
+    }
   ],
   "presets": [{"name": "Text"}]
 }
