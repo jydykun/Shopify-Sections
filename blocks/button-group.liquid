@@ -1,10 +1,15 @@
 <!--BUTTON GROUP BLOCK-->
-<div class="btn-group" style="--gap:{{ block.settings.btn_group_gap }}px" {{ block.shopify_attributes }}>
+<div id="block-{{ block.id }}" class="block-btn-group" {{ block.shopify_attributes }}>
     {% content_for 'blocks' %}
 </div>
+{% style %}
+#block-{{ block.id }} {
+    --gap: {{ block.settings.btn_group_gap }}px;
+}
+{% endstyle %}
 
 {% stylesheet %}
-.btn-group {
+.block-btn-group {
     display: flex;
     gap: var(--gap);
 }
@@ -35,6 +40,9 @@
                 },
                 {
                     "type": "button",
+                    "settings": {
+                        "color_scheme": "secondary"
+                    }
                 }
             ]
         }

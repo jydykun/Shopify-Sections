@@ -1,11 +1,5 @@
 <!--SLIDE BLOCK-->
-<div class="mh-slider__slide {{ block.settings.position }}"
-    style="
-    --padding-x:{{ block.settings.padding_x }}px;
-    --line-height:{{ block.settings.spacing }}px;
-    "
-    {{ block.shopify_attributes }}
-    >
+<div id="block-{{ block.id }}" class="mh-slider__slide {{ block.settings.position }}" {{ block.shopify_attributes }}>
     {% if block.settings.bg_image != blank %}
         {{ block.settings.bg_image | image_url: width: 1280| image_tag: class: 'mh-slider_bg-image' }}
     {% endif %}
@@ -13,6 +7,14 @@
         {% content_for 'blocks' %}
     </article>
 </div>
+
+{% style %}
+#block-{{ block.id }} {
+    --padding-x:{{ block.settings.padding_x }}px;
+    --line-height:{{ block.settings.spacing }}px;
+}
+{% endstyle %}
+
 {% stylesheet %}
 .mh-slider__slide {
     position: relative;

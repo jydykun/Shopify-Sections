@@ -12,9 +12,19 @@
     "color_schemes": {
       "scheme-1": {
         "settings": {
-          
+          "primary_color": "#121212",
+          "secondary_color": "#ffffff",
+          "accent_color": "#ADADAD",
+          "additional_color": "#515151",
+          "dark_color": "#121212",
+          "light_color": "#ffffff",
+          "button_bg_color": "#121212",
+          "button_label": "#ffffff",
+          "border_color": "#121212",
+          "hover_bg_color": "#ffffff",
+          "hover_label_color": "#121212"
         }
-      }
+      },
     }
   }
 }
