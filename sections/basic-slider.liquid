@@ -1,290 +1,117 @@
 <div class="swiper mhslider">
   <div class="swiper-wrapper mhslider__wrapper">
+    {% for block in section.blocks %}
     <div class="swiper-slide mhslider__slide">
       <img class="mhslider__image" src="{{ 'images/banner.jpg' | asset_url }}" alt="">
       <div class="mhslider__slide-wrapper">
         <article class="mhslider__content">
           <div class="mhslider__item mhslider__item--show-up">
-            <h2 class="mhslider__heading">Heading</h2>
+            <h2 class="mhslider__heading">{{ block.settings.heading }}</h2>
           </div>
           <div class="mhslider__item mhslider__item--show-up">
             <p class="mhslider__desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas maximus libero odio, sed iaculis sem mattis eget. Pellentesque tincidunt sodales sagittis. Donec a sapien a erat finibus pellentesque. Fusce ac vestibulum tortor.</p>
           </div>
           <div class="mhslider__item mhslider__item--show-up">
-            <a class="mhslider__button" href="#">
-              <span class="mhslider__button-label">Button</span>
-              <span class="mhslider__button-hover"></span>
-            </a>
+            <div class="mhslider__button-wrapper">
+              <a class="mhslider__button" href="{{ block.settings.primary_button_link }}">
+                <span class="mhslider__button-label">{{ block.settings.primary_button_label }}</span>
+                <span class="mhslider__button-hover"></span>
+              </a>
+              {% if block.settings.show_secondary_button %}
+              <a class="mhslider__button" href="{{ block.settings.secondary_button_link }}">
+                <span class="mhslider__button-label">{{ block.settings.secondary_button_label }}</span>
+                <span class="mhslider__button-hover"></span>
+              </a>
+            {% endif %}
+            </div>
           </div>
         </article>
       </div>
     </div>
-    <div class="swiper-slide mhslider__slide">
-      <img class="mhslider__image" src="{{ 'images/banner.jpg' | asset_url }}" alt="">
-      <div class="mhslider__slide-wrapper">
-        <article class="mhslider__content">
-          <div class="mhslider__item mhslider__item--show-up">
-            <h2 class="mhslider__heading">Heading</h2>
-          </div>
-          <div class="mhslider__item mhslider__item--show-up">
-            <p class="mhslider__desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas maximus libero odio, sed iaculis sem mattis eget. Pellentesque tincidunt sodales sagittis. Donec a sapien a erat finibus pellentesque. Fusce ac vestibulum tortor.</p>
-          </div>
-          <div class="mhslider__item mhslider__item--show-up">
-            <a class="mhslider__button" href="#">
-              <span class="mhslider__button-label">Button</span>
-              <span class="mhslider__button-hover"></span>
-            </a>
-          </div>
-        </article>
-      </div>
-    </div>
+    {% endfor %}
   </div>
 
   <!-- NAVIGATION BUTTONS -->
   <div class="swiper-pagination mhslider__pagination"></div>
 </div>
 
-{% stylesheet %}
+{% render "mhslider-css" %}
+{% render "mhslider-js" %}
+
+{% style %}
 .mhslider {
-    height: 600px;
-    font-size: 20px;
+  height: {{ section.settings.mhslider_height }}px;
 }
-
-.mhslider__slide {
-    position: relative;
-    padding: 0 40px;
-    background-color: slategray;
-}
-
-.mhslider__image {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    top: 0;
-    left: 0;
-    z-index: -1;
-}
-
-.mhslider__slide-wrapper {
-    height: inherit;
-    display: flex;
-    justify-content: center;
-}
-
-.mhslider__content {
-    height: inherit;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 35px;
-    text-align: center;
-}
-
-.mhslider__heading {
-    font-size: 3rem;
-    line-height: normal;
-}
-
-.mhslider__desc {
-    max-width: 37.5rem;
-
-}
-
-.mhslider__button {
-    position: relative;
-    display: inline-block;
-    padding: 15px 30px;
-    color: white;
-    border-radius: 5px;
-    background-color: black;
-    transition: all 0.3s ease-in-out;
-    overflow: hidden;
-    z-index: 0;
-    &:hover > .mhslider__button-hover {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.mhslider__button-hover {
-    position: absolute;
-    left: 0;
-    top: 0;
-    display: inline-block;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transform: translateY(100%);
-    background-color: red;
-    transition: all 0.3s ease-in-out;
-    z-index: -1;
-}
-
-.mhslider__pagination {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    position: absolute;
-    bottom: 35px !important;
-    z-index: 10;
-}
-
-.mhslider__pagination-bullet {
-    width: 15px;
-    opacity: 0.5;
-}
-
-.mhslider__pagination-bullet--active {
-    transform: scale(1.2);
-    transition: transform 0.3s ease-in-out;
-    opacity: 1;
-}
-
-.mhslider__pagination-bullet--clickable >
-.mhslider__pagination-bullet {
-    cursor: pointer;
-}
-
-.mhslider__pagination-bullet-circle {
-    fill: pink;
-    stroke: red;
-    stroke-width: 3;
-    stroke-dasharray: 0 62.83 0;
-    stroke-opacity: 0;
-    transform: rotate(-90deg);
-    transform-origin: center;
-}   
-
-.mhslider__pagination-bullet--active
-.mhslider__pagination-bullet-circle {
-    stroke-opacity: 1;
-}
-
-.mhslider__item {
-    margin: 0;
-    opacity: 0;
-    transition: all 1s ease;
-}
-
-.mhslider__item--show-up {
-    transform: translateY(40px);
-}
-
-.mhslider__item.is-active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (min-width: 768px) {
-    .mhslider__slide {
-        background-color: teal;
-    }
-    
-    .mhslider__slide-wrapper {
-        width: 100%;
-        max-width: 1280px;
-        margin: 0 auto;
-    }
-}
-{% endstylesheet %}
-
-
-{% javascript %}
-const AUTOPLAY_DELAY = 3000;
-const CIRCUMFERENCE = -62.83;
-
-function animateActiveSlide(swiper) {
-  const activeSlide = swiper.slides[swiper.activeIndex];
-  if (!activeSlide) return;
-
-  const content = activeSlide.querySelector('.mhslider__content');
-  if (!content) return;
-
-  const items = content.querySelectorAll('.mhslider__item');
-
-  items.forEach((el, index) => {
-    el.style.transitionDelay = `${index * 0.15}s`;
-    el.classList.add('is-active');
-  });
-}
-
-const swiper = new Swiper('.mhslider', {
-  direction: 'horizontal',
-  effect: 'fade',
-  loop: true,
-  autoplay: {
-    delay: AUTOPLAY_DELAY,
-    disableOnInteraction: false,
-    pauseOnMouseEnter: true,
-  },
-  pagination: {
-    el: '.mhslider__pagination',
-    bulletClass: 'mhslider__pagination-bullet',
-    bulletActiveClass: 'mhslider__pagination-bullet--active',
-    clickable: true,
-    clickableClass: 'mhslider__pagination-bullet--clickable',
-    renderBullet(index, className) {
-      return `
-        <button class="${className}" aria-label="Go to slide ${index + 1}">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <circle class="mhslider__pagination-bullet-circle" cx="12" cy="12" r="10"
-            />
-          </svg>
-        </button>
-      `;
-    },
-  },
-  on: {
-    autoplayTimeLeft(swiper, time, progress) {
-      const activeBullet = swiper.pagination.bullets[swiper.realIndex];
-      if (!activeBullet) return;
-
-      const circle = activeBullet.querySelector('.mhslider__pagination-bullet-circle');
-      if (!circle) return;
-
-      circle.style.strokeDashoffset = CIRCUMFERENCE * (1 - progress);
-    },
-
-    init(swiper) {
-      animateActiveSlide(swiper); // FIX FIRST SLIDE ANIMATION
-    },
-
-    slideChangeTransitionStart() {
-      // RESET ALL ITEMS
-      document.querySelectorAll('.mhslider__item').forEach(el => {
-        el.classList.remove('is-active');
-        el.style.transitionDelay = '0s';
-      });
-    },
-
-    slideChangeTransitionEnd() {
-      const activeSlide = swiper.slides[swiper.activeIndex];
-      
-      const content = activeSlide.querySelector('.mhslider__content');
-      if (!content) return;
-
-      const items = content.querySelectorAll('.mhslider__item');
-
-      items.forEach((el, index) => {
-        el.style.transitionDelay = `${index * 0.15}s`;
-        el.classList.add('is-active');
-      });
-    }
-  }
-  
-});
-
-
-// JavaScript code here
-{% endjavascript %}
-
+{% endstyle %}
 
 {% schema %}
 {
   "name": "Basic Slider",
+  "settings": [
+    {
+      "type": "range",
+      "id": "mhslider_height",
+      "label": "Slider Height",
+      "min": 300,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 600
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Lorem Ipsum",
+        },
+        {
+          "type": "text",
+          "id": "desc",
+          "label": "Description",
+          "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at ullamcorper arcu. Morbi mattis mi mollis arcu ullamcorper, nec elementum odio vehicula.",
+        },
+        {
+          "type": "header",
+          "content": "Button Settings"
+        },
+        {
+          "type": "text",
+          "id": "primary_button_label",
+          "label": "Primary Button Label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "primary_button_link",
+          "label": "Primary Button Link",
+        },
+        {
+          "type": "checkbox",
+          "id": "show_secondary_button",
+          "label": "Show Secondary Button",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "secondary_button_label",
+          "label": "Secondary Button Label",
+          "default": "Shop Now",
+          "visible_if": "{{ block.settings.show_secondary_button }}"
+        },
+        {
+          "type": "url",
+          "id": "secondary_button_link",
+          "label": "Secondary Button Link",
+          "visible_if": "{{ block.settings.show_secondary_button }}"
+        }
+      ]
+    },
+  ]
 }
 {% endschema %}

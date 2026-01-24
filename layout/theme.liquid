@@ -11,8 +11,9 @@
     {{ 'css/preflight.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'css/theme.css' | asset_url | stylesheet_tag }}
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js" defer></script>
+    {% render 'mhslider-core' %}
+
+
 
     {{ content_for_header }}
   </head>

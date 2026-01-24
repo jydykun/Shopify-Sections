@@ -1,0 +1,85 @@
+{% javascript %}
+const AUTOPLAY_DELAY = 3000;
+const CIRCUMFERENCE = -62.83;
+
+function animateActiveSlide(swiper) {
+  const activeSlide = swiper.slides[swiper.activeIndex];
+  if (!activeSlide) return;
+
+  const content = activeSlide.querySelector('.mhslider__content');
+  if (!content) return;
+
+  const items = content.querySelectorAll('.mhslider__item');
+
+  items.forEach((el, index) => {
+    el.style.transitionDelay = `${index * 0.15}s`;
+    el.classList.add('is-active');
+  });
+}
+
+const swiper = new Swiper('.mhslider', {
+  direction: 'horizontal',
+  effect: 'fade',
+  loop: true,
+  autoplay: {
+    delay: AUTOPLAY_DELAY,
+    disableOnInteraction: false,
+    pauseOnMouseEnter: true,
+  },
+  pagination: {
+    el: '.mhslider__pagination',
+    bulletClass: 'mhslider__pagination-bullet',
+    bulletActiveClass: 'mhslider__pagination-bullet--active',
+    clickable: true,
+    clickableClass: 'mhslider__pagination-bullet--clickable',
+    renderBullet(index, className) {
+      return `
+        <button class="${className}" aria-label="Go to slide ${index + 1}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <circle class="mhslider__pagination-bullet-circle" cx="12" cy="12" r="10"
+            />
+          </svg>
+        </button>
+      `;
+    },
+  },
+  on: {
+    autoplayTimeLeft(swiper, time, progress) {
+      const activeBullet = swiper.pagination.bullets[swiper.realIndex];
+      if (!activeBullet) return;
+
+      const circle = activeBullet.querySelector('.mhslider__pagination-bullet-circle');
+      if (!circle) return;
+
+      circle.style.strokeDashoffset = CIRCUMFERENCE * (1 - progress);
+    },
+
+    init(swiper) {
+      animateActiveSlide(swiper); // FIX FIRST SLIDE ANIMATION
+    },
+
+    slideChangeTransitionStart() {
+      // RESET ALL ITEMS
+      document.querySelectorAll('.mhslider__item').forEach(el => {
+        el.classList.remove('is-active');
+        el.style.transitionDelay = '0s';
+      });
+    },
+
+    slideChangeTransitionEnd() {
+      const activeSlide = swiper.slides[swiper.activeIndex];
+      
+      const content = activeSlide.querySelector('.mhslider__content');
+      if (!content) return;
+
+      const items = content.querySelectorAll('.mhslider__item');
+
+      items.forEach((el, index) => {
+        el.style.transitionDelay = `${index * 0.15}s`;
+        el.classList.add('is-active');
+      });
+    }
+  }
+  
+});
+{% endjavascript %}
