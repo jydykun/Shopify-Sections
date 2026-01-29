@@ -3,24 +3,24 @@
     {% for block in section.blocks %}
     <div class="swiper-slide mhslider__slide">
       <img class="mhslider__image" src="{{ 'images/banner.jpg' | asset_url }}" alt="">
-      <div class="mhslider__slide-wrapper">
-        <article class="mhslider__content">
+      <div class="mhslider__slide-wrapper mhslider__slide-wrapper--{{ section.settings.position }}">
+        <article class="mhslider__content mhslider__content--{{ block.settings.alignment }}">
           <div class="mhslider__item mhslider__item--show-up">
             <h2 class="mhslider__heading">{{ block.settings.heading }}</h2>
           </div>
           <div class="mhslider__item mhslider__item--show-up">
-            <p class="mhslider__desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas maximus libero odio, sed iaculis sem mattis eget. Pellentesque tincidunt sodales sagittis. Donec a sapien a erat finibus pellentesque. Fusce ac vestibulum tortor.</p>
+            <p class="mhslider__desc">{{ block.settings.desc }}</p>
           </div>
           <div class="mhslider__item mhslider__item--show-up">
             <div class="mhslider__button-wrapper">
-              <a class="mhslider__button" href="{{ block.settings.primary_button_link }}">
+              <a class="mhslider__button mhslider__button--primary" href="{{ block.settings.primary_button_link }}">
                 <span class="mhslider__button-label">{{ block.settings.primary_button_label }}</span>
-                <span class="mhslider__button-hover"></span>
+                <span class="mhslider__button-hover mhslider__button-hover--primary"></span>
               </a>
-              {% if block.settings.show_secondary_button %}
-              <a class="mhslider__button" href="{{ block.settings.secondary_button_link }}">
+              {% if block.settings.add_secondary_button %}
+              <a class="mhslider__button mhslider__button--secondary" href="{{ block.settings.secondary_button_link }}">
                 <span class="mhslider__button-label">{{ block.settings.secondary_button_label }}</span>
-                <span class="mhslider__button-hover"></span>
+                <span class="mhslider__button-hover mhslider__button-hover--secondary"></span>
               </a>
             {% endif %}
             </div>
@@ -42,6 +42,56 @@
 .mhslider {
   height: {{ section.settings.mhslider_height }}px;
 }
+
+{% for block in section.blocks %}
+.mhslider__heading {
+  color: {{ block.settings.heading_color }};
+}
+.mhslider__desc {
+  color: {{ block.settings.desc_color }};
+}
+.mhslider__button--primary {
+  color: {{ block.settings.primary_label_color }};
+  border-color: {{ block.settings.primary_border_color }};
+  background: {{ block.settings.primary_label_bg }};
+  &:hover > .mhslider__button-hover--primary {
+    background: {{ block.settings.primary_label_hvrbg }};
+  }
+}
+.mhslider__button--secondary {
+  color: {{ block.settings.secondary_label_color }};
+  background: {{ block.settings.secondary_label_bg }};
+  &:hover > .mhslider__button-hover--secondary {
+    background: {{ block.settings.secondary_label_hvrbg }};
+  }
+}
+{% endfor %}
+
+
+@media (min-width: 768px) {
+  .mhslider__slide-wrapper--left {
+    justify-content: flex-start;
+  }
+  .mhslider__slide-wrapper--center {
+    justify-content: center;
+  }
+  .mhslider__slide-wrapper--right {
+    justify-content: flex-end;
+  }
+  .mhslider__content--left {
+    text-align: left;
+    align-items: flex-start;
+  }
+  .mhslider__content--center {
+    text-align: center;
+    align-items: center;
+  }
+  .mhslider__content--right {
+    text-align: right;
+    align-items: flex-end;
+  }
+}
+
 {% endstyle %}
 
 {% schema %}
@@ -57,7 +107,13 @@
       "step": 10,
       "unit": "px",
       "default": 600
-    }
+    },
+    {
+      "type": "text_alignment",
+      "id": "position",
+      "label": "Position",
+      "default": "center"
+    },
   ],
   "blocks": [
     {
@@ -71,45 +127,116 @@
           "default": "Lorem Ipsum",
         },
         {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Color",
+        },
+        {
           "type": "text",
           "id": "desc",
           "label": "Description",
           "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at ullamcorper arcu. Morbi mattis mi mollis arcu ullamcorper, nec elementum odio vehicula.",
         },
         {
+          "type": "color",
+          "id": "desc_color",
+          "label": "Color",
+        },
+        {
+          "type": "text_alignment",
+          "id": "alignment",
+          "label": "Alignment",
+          "default": "center"
+        },
+        {
           "type": "header",
-          "content": "Button Settings"
+          "content": "Primary Button"
         },
         {
           "type": "text",
           "id": "primary_button_label",
-          "label": "Primary Button Label",
-          "default": "Shop Now"
+          "label": "Label",
+          "default": "Button",
         },
         {
           "type": "url",
           "id": "primary_button_link",
-          "label": "Primary Button Link",
+          "label": "Link",
+        },
+        {
+          "type": "color",
+          "id": "primary_label_color",
+          "label": "Label Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "primary_label_bg",
+          "label": "Background Color",
+          "default": "#0051CA"
+        },
+        {
+          "type": "color",
+          "id": "primary_label_hvrcolor",
+          "label": "Hover Label Color",
+        },
+        {
+          "type": "color",
+          "id": "primary_label_hvrbg",
+          "label": "Hover Background Color",
+          "default": "#0041a3"
         },
         {
           "type": "checkbox",
-          "id": "show_secondary_button",
-          "label": "Show Secondary Button",
+          "id": "add_secondary_button",
+          "label": "Add Secondary Button",
           "default": false
+        },
+        {
+          "type": "header",
+          "content": "Secondary Button",
+          "visible_if": "{{ block.settings.add_secondary_button }}"
         },
         {
           "type": "text",
           "id": "secondary_button_label",
-          "label": "Secondary Button Label",
-          "default": "Shop Now",
-          "visible_if": "{{ block.settings.show_secondary_button }}"
+          "label": "Label",
+          "default": "Button",
+          "visible_if": "{{ block.settings.add_secondary_button }}"
         },
         {
           "type": "url",
           "id": "secondary_button_link",
-          "label": "Secondary Button Link",
-          "visible_if": "{{ block.settings.show_secondary_button }}"
-        }
+          "label": "Link",
+          "visible_if": "{{ block.settings.add_secondary_button }}"
+        },
+        {
+          "type": "color",
+          "id": "secondary_label_color",
+          "label": "Label Color",
+          "default": "#ffffff",
+          "visible_if": "{{ block.settings.add_secondary_button }}"
+        },
+        {
+          "type": "color",
+          "id": "secondary_label_bg",
+          "label": "Background Color",
+          "default": "#0051CA",
+          "visible_if": "{{ block.settings.add_secondary_button }}"
+        },
+        {
+          "type": "color",
+          "id": "secondary_label_hvrcolor",
+          "label": "Hover Label Color",
+          "visible_if": "{{ block.settings.add_secondary_button }}"
+        },
+        {
+          "type": "color",
+          "id": "secondary_label_hvrbg",
+          "label": "Hover Background Color",
+          "default": "#0041a3",
+          "visible_if": "{{ block.settings.add_secondary_button }}"
+        },
       ]
     },
   ]
