@@ -1,0 +1,154 @@
+<!--SLIDE BLOCK-->
+<div id="block-{{ block.id }}" class="mh-slider__slide {{ block.settings.position }}">
+    {% if block.settings.bg_image != blank %}
+        {{ block.settings.bg_image | image_url: width: 1280 | image_tag: class: 'mh-slider_bg-image' }}
+    {% endif %}
+    <article class="mh-slider__content mh-slider__content--{{ block.settings.content_alignment }}">
+        {% content_for 'blocks' %}
+    </article>
+</div>
+
+{% style %}
+#block-{{ block.id }} {
+    --padding-x:{{ block.settings.padding_x }}px;
+    --line-height:{{ block.settings.spacing }}px;
+}
+{% endstyle %}
+
+{% stylesheet %}
+.mh-slider__slide {
+    position: relative;
+    height: inherit;
+    padding: 0 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mh-slider_bg-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    object-fit: cover;
+    object-position: center center;
+}
+.mh-slider__content {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: var(--line-height);
+
+}
+.mh-slider__content--left {
+    text-align: left;
+    align-items: start;
+}
+.mh-slider__content--center {
+    text-align: center;
+    align-items: center;
+}
+.mh-slider__content--right {
+    text-align: right;
+    align-items: end;
+}
+@media (min-width: 768px) {
+    .mh-slider__slide {
+        padding: 0 var(--padding-x);
+    }
+    .mh-slider__slide--left {
+        justify-content: start;
+    }
+    .mh-slider__slide--center {
+        justify-content: center;
+    }
+    .mh-slider__slide--right {
+        justify-content: end;
+    }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+    "name": "Slide",
+    "class": "swiper-slide",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "bg_image",
+            "label": "Background Image"
+        },
+        {
+            "type": "select",
+            "id": "position",
+            "label": "Position",
+            "options": [
+                {
+                    "value": "mh-slider__slide--left",
+                    "label": "Left"
+                },
+                {
+                    "value": "mh-slider__slide--center",
+                    "label": "Center"
+                },
+                {
+                    "value": "mh-slider__slide--right",
+                    "label": "Right"
+                }
+            ],
+            "default": "mh-slider__slide--left",
+            "info": "Works only on larger screen sizes."
+        },
+        {
+            "type": "text_alignment",
+            "id": "content_alignment",
+            "label": "Content Alignment",
+            "default": "left"
+        },
+        {
+            "type": "range",
+            "id": "spacing",
+            "min": 1,
+            "max": 50,
+            "step": 1,
+            "unit": "px",
+            "default": 16,
+            "label": "Spacing",
+        },
+        {
+            "type": "range",
+            "id": "padding_x",
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "default": 40,
+            "label": "Padding",
+        },
+    ],
+    "blocks": [{"type": "text" }, {"type": "button"}, {"type": "button-group"}],
+    "presets": [
+        {
+            "name": "Slide",
+            "blocks": [
+                {
+                    "type": "text",
+                    "settings": {
+                        "text": "<h2>Slide Title</h2>",
+                        "font_size": 32,
+                        "leading": 40,
+                    }
+                },
+                {
+                    "type": "text",
+                    "settings": {
+                        "text": "<p>Slide Description</p>",
+                    }
+                },
+                {
+                    "type": "button"
+                },
+            ]
+        }
+    ]
+}
+{% endschema %}
