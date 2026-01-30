@@ -2,7 +2,9 @@
   <div class="swiper-wrapper mhslider__wrapper">
     {% for block in section.blocks %}
     <div class="swiper-slide mhslider__slide">
-      <img class="mhslider__image" src="{{ 'images/banner.jpg' | asset_url }}" alt="">
+      {% if block.settings.slide_image != blank %}
+        {{ block.settings.slide_image | image_url: width: 1000 | image_tag: class: 'mhslider__image' }}
+      {% endif %}
       <div class="mhslider__slide-wrapper mhslider__slide-wrapper--{{ block.settings.position }}">
         <article class="mhslider__content mhslider__content--{{ block.settings.alignment }}">
           <div class="mhslider__item mhslider__item--show-up">
@@ -208,6 +210,11 @@
       "type": "slide",
       "name": "Slide",
       "settings": [
+        {
+          "type": "image_picker",
+          "id": "slide_image",
+          "label": "Background Image",
+        },
         {
           "type": "text",
           "id": "heading",
