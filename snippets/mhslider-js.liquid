@@ -1,6 +1,9 @@
 {% javascript %}
-const AUTOPLAY_DELAY = 3000;
-const CIRCUMFERENCE = -62.83;
+const el = document.querySelector('.mhslider');
+if(!el) return
+
+const AUTOPLAY_DELAY = Number(el.dataset.autoplay);
+const PAGINATION_CIRCUMFERENCE = -62.83;
 
 function animateActiveSlide(swiper) {
   const activeSlide = swiper.slides[swiper.activeIndex];
@@ -51,7 +54,7 @@ const swiper = new Swiper('.mhslider', {
       const circle = activeBullet.querySelector('.mhslider__pagination-bullet-circle');
       if (!circle) return;
 
-      circle.style.strokeDashoffset = CIRCUMFERENCE * (1 - progress);
+      circle.style.strokeDashoffset = PAGINATION_CIRCUMFERENCE * (1 - progress);
     },
 
     init(swiper) {
