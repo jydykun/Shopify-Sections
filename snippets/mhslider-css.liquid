@@ -1,7 +1,7 @@
 {% stylesheet %}
 .mhslider {
     height: 600px;
-    font-size: 20px;
+    font-size: 18px;
 }
 
 .mhslider__slide {
@@ -33,7 +33,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 35px;
+    gap: 25px;
     text-align: center;
 }
 
@@ -49,8 +49,9 @@
 
 .mhslider__button-wrapper {
     display: flex;
-    gap: 20px;
+    flex-flow: column nowrap;
     justify-content: center;
+    gap: 10px;
 }
 
 .mhslider__button {
@@ -137,10 +138,20 @@
 }
 
 @media (min-width: 768px) {
+    .mhslider {
+        font-size: 20px;
+    }
     .mhslider__slide-wrapper {
         width: 100%;
         max-width: 1280px;
         margin: 0 auto;
+    }
+    .mhslider__content {
+        gap: 35px;
+    }
+    .mhslider__button-wrapper{
+        flex-flow: row nowrap;
+        gap: 20px;
     }
 }
 {% endstylesheet %}
