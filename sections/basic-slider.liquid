@@ -107,6 +107,7 @@
 {% schema %}
 {
   "name": "Basic Slider",
+  "limit": 1,
   "settings": [
     {
       "type": "range",
@@ -278,16 +279,17 @@
   ],
   "presets": [
     {
-      "name": "Slide",
+      "name": "Slider-Basic",
       "blocks": [
         {
           "type": "slide",
-          "settings": {
-            "heading": "This is a slide!"
-          }
+        },
+        {
+          "type": "slide",
         }
       ]
     }
+
   ]
 }
 {% endschema %}

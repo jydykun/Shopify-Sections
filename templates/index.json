@@ -9,12 +9,23 @@
  */
 {
   "sections": {
+
+  },
+  "order": [
+
+  ]
+}
+
+/*
+{
+  "sections": {
     "slider": {
       "type": "basic-slider",
       "settings": {}
     }
   },
   "order": [
-    "slider"
+    
   ]
 }
+*/
