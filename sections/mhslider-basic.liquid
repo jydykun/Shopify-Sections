@@ -6,7 +6,7 @@
         {{ block.settings.slide_image | image_url: width: 1280 | image_tag: class: 'mhslider__image' }}
       {% endif %}
       <div class="mhslider__slide-wrapper mhslider__slide-wrapper--{{ block.settings.position }}">
-        <article class="mhslider__content mhslider__content--{{ block.settings.alignment }}">
+        <div class="mhslider__content mhslider__content--{{ block.settings.alignment }}">
           <div class="mhslider__item mhslider__item--show-up">
             <h2 class="mhslider__heading mhslider__heading--{{ block.id }}">{{ block.settings.heading }}</h2>
           </div>
@@ -27,23 +27,20 @@
             {% endif %}
             </div>
           </div>
-        </article>
+        </div>
       </div>
     </div>
     {% endfor %}
   </div>
 
-  <!-- NAVIGATION BUTTONS -->
+  <!-- PAGINATION BUTTONS -->
   <div class="swiper-pagination mhslider__pagination"></div>
 </div>
 
-{% render "mhslider-css" %}
-{% render "mhslider-js" %}
+{% render "mhslider-basic-css" %}
+{% render "mhslider-basic-js" %}
 
 {% style %}
-.mhslider {
-  height: {{ section.settings.mhslider_height }}px;
-}
 
 {% for block in section.blocks %}
 .mhslider__slide--{{ block.id }} {
@@ -111,18 +108,8 @@
   "settings": [
     {
       "type": "range",
-      "id": "mhslider_height",
-      "label": "Slider Height",
-      "min": 300,
-      "max": 1000,
-      "step": 10,
-      "unit": "px",
-      "default": 600
-    },
-    {
-      "type": "range",
       "id": "mhslider_autoplay",
-      "label": "Autoplay",
+      "label": "Autoplay Delay",
       "min": 2500,
       "max": 5000,
       "step": 500,
@@ -137,15 +124,25 @@
       "limit": 3,
       "settings": [
         {
+          "type": "header",
+          "content": "Background"
+        },
+        {
           "type": "image_picker",
           "id": "slide_image",
           "label": "Background Image",
+          "info": "Recommended size: 1280px wide. Image will be cropped to fit the slide."
         },
         {
           "type": "color_background",
           "id": "background",
           "label": "Background Color",
-          "default": "linear-gradient(#EDEDED, #CECECE)"
+          "default": "linear-gradient(#EDEDED, #CECECE)",
+          "info": "Used as the background when no image is added."
+        },
+        {
+          "type": "header",
+          "content": "Texts"
         },
         {
           "type": "text",
@@ -279,7 +276,7 @@
   ],
   "presets": [
     {
-      "name": "Slider-Basic",
+      "name": "MHSlider-Basic",
       "blocks": [
         {
           "type": "slide",
