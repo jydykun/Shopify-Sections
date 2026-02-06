@@ -1,135 +1,118 @@
 {% javascript %}
 
+// Select the slider element
+const slider = document.querySelector('.mhslider');
+if (!slider) return;
+
+// Read settings from data attributes
+const AUTOPLAY_DELAY = Number(slider.dataset.autoplay) || 5000;
+const PAGINATION_CIRCUMFERENCE = -62.83;
+
+// Pagination element scoped to slider
+const paginationEl = slider.querySelector('.mhslider__pagination');
+
 /**
- * Initialize ONE slider instance
- * @param {HTMLElement} slider - .mhslider element
+ * Animate items inside the active slide
  */
-function mhsliderBasic(slider) {
+function animateActiveSlide(swiper) {
+  const activeSlide = swiper.slides[swiper.activeIndex];
+  if (!activeSlide) return;
 
-  // 🛑 Prevent double initialization (important for Shopify theme editor)
-  if (slider.classList.contains('swiper-initialized')) return;
-
-  // ⏱ Autoplay delay from data attribute (fallback to 5000ms)
-  const AUTOPLAY_DELAY = Number(slider.dataset.autoplay) || 5000;
-
-  // 🔵 SVG circle circumference for pagination animation
-  const PAGINATION_CIRCUMFERENCE = -62.83;
-
-  // 🎯 Pagination element scoped to THIS slider only
-  const paginationEl = slider.querySelector('.mhslider__pagination');
-
-  /**
-   * Animate elements inside the active slide
-   */
-  function animateActiveSlide(swiper) {
-    // Get currently active slide
-    const activeSlide = swiper.slides[swiper.activeIndex];
-    if (!activeSlide) return;
-
-    // Get all animatable items inside this slide
-    const items = activeSlide.querySelectorAll('.mhslider__item');
-
-    // Animate items with staggered delay
-    items.forEach((el, index) => {
-      el.style.transitionDelay = `${index * 0.15}s`;
-      el.classList.add('is-active');
-    });
-  }
-
-  // 🚀 Initialize Swiper
-  new Swiper(slider, {
-    direction: 'horizontal',
-    effect: 'fade',
-    loop: true,
-
-    // ▶ Autoplay (disabled if data-autoplay is missing or 0)
-    autoplay: AUTOPLAY_DELAY
-      ? {
-          delay: AUTOPLAY_DELAY,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
-        }
-      : false,
-
-    // 🔘 Pagination (scoped per slider)
-    pagination: paginationEl
-      ? {
-          el: paginationEl,
-          bulletClass: 'mhslider__pagination-bullet',
-          bulletActiveClass: 'mhslider__pagination-bullet--active',
-          clickable: true,
-
-          // Custom SVG pagination bullets
-          renderBullet(index, className) {
-            return `
-              <button class="${className}" aria-label="Go to slide ${index + 1}">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <circle
-                    class="mhslider__pagination-bullet-circle"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                  />
-                </svg>
-              </button>
-            `;
-          },
-        }
-      : false,
-
-    // 🎧 Swiper lifecycle events
-    on: {
-      /**
-       * On first init
-       */
-      init(swiper) {
-        animateActiveSlide(swiper);
-      },
-
-      /**
-       * Update SVG progress animation during autoplay
-       */
-      autoplayTimeLeft(swiper, time, progress) {
-        if (!swiper.pagination?.bullets) return;
-
-        const activeBullet = swiper.pagination.bullets[swiper.realIndex];
-        if (!activeBullet) return;
-
-        const circle = activeBullet.querySelector(
-          '.mhslider__pagination-bullet-circle'
-        );
-        if (!circle) return;
-
-        circle.style.strokeDashoffset =
-          PAGINATION_CIRCUMFERENCE * (1 - progress);
-      },
-
-      /**
-       * Before slide changes → reset animations
-       */
-      slideChangeTransitionStart(swiper) {
-        // Reset ONLY items inside this slider
-        swiper.slides.forEach(slide => {
-          slide.querySelectorAll('.mhslider__item').forEach(el => {
-            el.classList.remove('is-active');
-            el.style.transitionDelay = '0s';
-          });
-        });
-      },
-
-      /**
-       * After slide transition → animate new slide
-       */
-      slideChangeTransitionEnd(swiper) {
-        animateActiveSlide(swiper);
-      },
-    },
+  activeSlide.querySelectorAll('.mhslider__item').forEach((el, index) => {
+    el.style.transitionDelay = `${index * 0.15}s`;
+    el.classList.add('is-active');
   });
 }
 
 /**
- * Initialize ALL sliders on the page
+ * Reset all animated items inside this slider
  */
-document.querySelectorAll('.mhslider').forEach(mhsliderBasic);
+function resetSlideItems(swiper) {
+  swiper.slides.forEach(slide => {
+    slide.querySelectorAll('.mhslider__item').forEach(el => {
+      el.classList.remove('is-active');
+      el.style.transitionDelay = '0s';
+    });
+  });
+}
+
+// Initialize Swiper
+new Swiper(slider, {
+  direction: 'horizontal',
+  effect: 'fade',
+  loop: true,
+
+  autoplay: AUTOPLAY_DELAY
+    ? {
+        delay: AUTOPLAY_DELAY,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      }
+    : false,
+
+  pagination: paginationEl
+    ? {
+        el: paginationEl,
+        bulletClass: 'mhslider__pagination-bullet',
+        bulletActiveClass: 'mhslider__pagination-bullet--active',
+        clickable: true,
+        renderBullet(index, className) {
+          return `
+            <button class="${className}" aria-label="Go to slide ${index + 1}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <circle
+                  class="mhslider__pagination-bullet-circle"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                />
+              </svg>
+            </button>
+          `;
+        },
+      }
+    : false,
+
+  on: {
+    /**
+     * First load animation
+     */
+    init(swiper) {
+      animateActiveSlide(swiper);
+    },
+
+    /**
+     * Autoplay progress ring animation
+     */
+    autoplayTimeLeft(swiper, time, progress) {
+      if (!swiper.pagination?.bullets) return;
+
+      const activeBullet = swiper.pagination.bullets[swiper.realIndex];
+      if (!activeBullet) return;
+
+      const circle = activeBullet.querySelector(
+        '.mhslider__pagination-bullet-circle'
+      );
+      if (!circle) return;
+
+      circle.style.strokeDashoffset =
+        PAGINATION_CIRCUMFERENCE * (1 - progress);
+    },
+
+    /**
+     * Before slide change → reset animations
+     */
+    slideChangeTransitionStart(swiper) {
+      resetSlideItems(swiper);
+    },
+
+    /**
+     * After slide change → animate new slide
+     */
+    slideChangeTransitionEnd(swiper) {
+      animateActiveSlide(swiper);
+    },
+  },
+});
 
 {% endjavascript %}
