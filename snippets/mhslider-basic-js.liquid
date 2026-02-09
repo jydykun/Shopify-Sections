@@ -1,118 +1,158 @@
 {% javascript %}
 
-// Select the slider element
-const slider = document.querySelector('.mhslider');
-if (!slider) return;
+(function () {
+  // ----------------------------------------
+  // Global namespace protection
+  // ----------------------------------------
+  window.MH = window.MH || {};
 
-// Read settings from data attributes
-const AUTOPLAY_DELAY = Number(slider.dataset.autoplay) || 5000;
-const PAGINATION_CIRCUMFERENCE = -62.83;
+  /**
+   * Store Swiper instances per slider element
+   */
+  MH.sliders = new Map();
 
-// Pagination element scoped to slider
-const paginationEl = slider.querySelector('.mhslider__pagination');
+  /**
+   * Initialize ONE mhslider
+   */
+  MH.initSlider = function (slider) {
+    if (!slider || MH.sliders.has(slider)) return;
 
-/**
- * Animate items inside the active slide
- */
-function animateActiveSlide(swiper) {
-  const activeSlide = swiper.slides[swiper.activeIndex];
-  if (!activeSlide) return;
+    const AUTOPLAY_DELAY = Number(slider.dataset.autoplay) || 5000;
+    const PAGINATION_CIRCUMFERENCE = -62.83;
+    const paginationEl = slider.querySelector('.mhslider__pagination');
 
-  activeSlide.querySelectorAll('.mhslider__item').forEach((el, index) => {
-    el.style.transitionDelay = `${index * 0.15}s`;
-    el.classList.add('is-active');
-  });
-}
+    function animateActiveSlide(swiper) {
+      const activeSlide = swiper.slides[swiper.activeIndex];
+      if (!activeSlide) return;
 
-/**
- * Reset all animated items inside this slider
- */
-function resetSlideItems(swiper) {
-  swiper.slides.forEach(slide => {
-    slide.querySelectorAll('.mhslider__item').forEach(el => {
-      el.classList.remove('is-active');
-      el.style.transitionDelay = '0s';
-    });
-  });
-}
+      activeSlide.querySelectorAll('.mhslider__item').forEach((el, index) => {
+        el.style.transitionDelay = `${index * 0.15}s`;
+        el.classList.add('is-active');
+      });
+    }
 
-// Initialize Swiper
-new Swiper(slider, {
-  direction: 'horizontal',
-  effect: 'fade',
-  loop: true,
+    function resetSlideItems(swiper) {
+      swiper.slides.forEach(slide => {
+        slide.querySelectorAll('.mhslider__item').forEach(el => {
+          el.classList.remove('is-active');
+          el.style.transitionDelay = '0s';
+        });
+      });
+    }
 
-  autoplay: AUTOPLAY_DELAY
-    ? {
-        delay: AUTOPLAY_DELAY,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-      }
-    : false,
+    const swiper = new Swiper(slider, {
+      direction: 'horizontal',
+      effect: 'fade',
+      loop: true,
 
-  pagination: paginationEl
-    ? {
-        el: paginationEl,
-        bulletClass: 'mhslider__pagination-bullet',
-        bulletActiveClass: 'mhslider__pagination-bullet--active',
-        clickable: true,
-        renderBullet(index, className) {
-          return `
-            <button class="${className}" aria-label="Go to slide ${index + 1}">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <circle
-                  class="mhslider__pagination-bullet-circle"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                />
-              </svg>
-            </button>
-          `;
+      autoplay: AUTOPLAY_DELAY
+        ? {
+            delay: AUTOPLAY_DELAY,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }
+        : false,
+
+      pagination: paginationEl
+        ? {
+            el: paginationEl,
+            bulletClass: 'mhslider__pagination-bullet',
+            bulletActiveClass: 'mhslider__pagination-bullet--active',
+            clickable: true,
+            clickableClass: 'mhslider__pagination-bullet--clickable',
+            renderBullet(index, className) {
+              return `
+                <button class="${className}" aria-label="Go to slide ${index + 1}">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <circle
+                      class="mhslider__pagination-bullet-circle"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                    />
+                  </svg>
+                </button>
+              `;
+            },
+          }
+        : false,
+
+      on: {
+        init(swiper) {
+          animateActiveSlide(swiper);
         },
-      }
-    : false,
 
-  on: {
-    /**
-     * First load animation
-     */
-    init(swiper) {
-      animateActiveSlide(swiper);
-    },
+        autoplayTimeLeft(swiper, time, progress) {
+          if (!swiper.pagination?.bullets) return;
 
-    /**
-     * Autoplay progress ring animation
-     */
-    autoplayTimeLeft(swiper, time, progress) {
-      if (!swiper.pagination?.bullets) return;
+          const bullet = swiper.pagination.bullets[swiper.realIndex];
+          const circle = bullet?.querySelector(
+            '.mhslider__pagination-bullet-circle'
+          );
+          if (!circle) return;
 
-      const activeBullet = swiper.pagination.bullets[swiper.realIndex];
-      if (!activeBullet) return;
+          circle.style.strokeDashoffset =
+            PAGINATION_CIRCUMFERENCE * (1 - progress);
+        },
 
-      const circle = activeBullet.querySelector(
-        '.mhslider__pagination-bullet-circle'
-      );
-      if (!circle) return;
+        slideChangeTransitionStart(swiper) {
+          resetSlideItems(swiper);
+        },
 
-      circle.style.strokeDashoffset =
-        PAGINATION_CIRCUMFERENCE * (1 - progress);
-    },
+        slideChangeTransitionEnd(swiper) {
+          animateActiveSlide(swiper);
+        },
+      },
+    });
 
-    /**
-     * Before slide change → reset animations
-     */
-    slideChangeTransitionStart(swiper) {
-      resetSlideItems(swiper);
-    },
+    // Store instance
+    MH.sliders.set(slider, swiper);
+  };
 
-    /**
-     * After slide change → animate new slide
-     */
-    slideChangeTransitionEnd(swiper) {
-      animateActiveSlide(swiper);
-    },
-  },
-});
+  /**
+   * Destroy ONE mhslider
+   */
+  MH.destroySlider = function (slider) {
+    const swiper = MH.sliders.get(slider);
+    if (!swiper) return;
 
+    swiper.destroy(true, true);
+    MH.sliders.delete(slider);
+  };
+
+  /**
+   * Init all sliders inside a container
+   */
+  MH.initAll = function (container = document) {
+    container.querySelectorAll('.mhslider').forEach(MH.initSlider);
+  };
+
+  /**
+   * ----------------------------------------
+   * Initial page load
+   * ----------------------------------------
+   */
+  document.addEventListener('DOMContentLoaded', () => {
+    MH.initAll();
+  });
+
+  /**
+   * ----------------------------------------
+   * Shopify Theme Editor Events
+   * ----------------------------------------
+   */
+
+  // When a section is loaded / re-rendered
+  document.addEventListener('shopify:section:load', event => {
+    MH.initAll(event.target);
+  });
+
+  // When a section is removed
+  document.addEventListener('shopify:section:unload', event => {
+    event.target
+      .querySelectorAll('.mhslider')
+      .forEach(MH.destroySlider);
+  });
+
+})();
 {% endjavascript %}
