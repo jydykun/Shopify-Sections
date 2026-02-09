@@ -81,13 +81,28 @@
     z-index: -1;
 }
 
+.mhslider__controls {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 10;
+}
+
+.mhslider__button-prev,
+.mhslider__button-next {
+    width: 35px;
+    height: 35px;
+}
+
+.mhslider__button-prev {
+    transform: rotate(180deg);
+}
+
 .mhslider__pagination {
     display: flex;
     justify-content: center;
     gap: 15px;
-    position: absolute;
-    bottom: 35px !important;
-    z-index: 10;
 }
 
 .mhslider__pagination-bullet {
