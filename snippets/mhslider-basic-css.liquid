@@ -1,5 +1,8 @@
+{% comment %}
+  Basic CSS for MH Slider
+
 {% stylesheet %}
-.mhslider {
+.mhslider[data-tier="basic"] {
     height: 600px;
     font-size: 18px;
 }
@@ -81,7 +84,7 @@
     z-index: -1;
 }
 
-.mhslider__pagination {
+.mhslider[data-tier="basic"].mhslider__pagination {
     display: flex;
     justify-content: center;
     gap: 15px;
@@ -155,3 +158,4 @@
     }
 }
 {% endstylesheet %}
+ {% endcomment %}
