@@ -40,19 +40,21 @@
   </div>
 
   <!-- NAVIGATION BUTTONS -->
-  <div class="mhslider__controls b">
-    <div class="mhslider__button-prev b">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M17.414,10.586,13.121,6.293,11.707,7.707,15,11H5v2H15l-3.293,3.293,1.414,1.414,4.293-4.293A2,2,0,0,0,17.414,10.586Z"/>
-      </svg>
-    </div>
+  <div class="mhslider__controls">
+    <div class="mhslider__controls-wrapper">
+      <div class="mhslider__button-prev">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.414,10.586,13.121,6.293,11.707,7.707,15,11H5v2H15l-3.293,3.293,1.414,1.414,4.293-4.293A2,2,0,0,0,17.414,10.586Z"/>
+        </svg>
+      </div>
 
-    <div class="mhslider__pagination b"></div>
+      <div class="mhslider__pagination"></div>
 
-    <div class="mhslider__button-next b">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M17.414,10.586,13.121,6.293,11.707,7.707,15,11H5v2H15l-3.293,3.293,1.414,1.414,4.293-4.293A2,2,0,0,0,17.414,10.586Z"/>
-      </svg>
+      <div class="mhslider__button-next">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.414,10.586,13.121,6.293,11.707,7.707,15,11H5v2H15l-3.293,3.293,1.414,1.414,4.293-4.293A2,2,0,0,0,17.414,10.586Z"/>
+        </svg>
+      </div>
     </div>
   </div>
 
@@ -66,38 +68,42 @@
 {% render 'mhslider-standard-js' %}
 
 {% style %}
+.mhslider[data-tier="standard"] {
   {% for block in section.blocks %}
-  .mhslider__slide--{{ block.id }} {
-    background: {{ block.settings.background }};
-  }
-  .mhslider__heading--{{ block.id }} {
-    color: {{ block.settings.heading_color }};
-  }
-  .mhslider__desc--{{ block.id }} {
-    color: {{ block.settings.desc_color }};
-  }
-  .mhslider__button--primary-{{ block.id }} {
-    color: {{ block.settings.primary_label_color }};
-    background: {{ block.settings.primary_label_bg }};
-    &:hover {
-      color: {{ block.settings.primary_label_hvrcolor }};
+    .mhslider__slide--{{ block.id }} {
+      background: {{ block.settings.background }};
     }
-    &:hover > .mhslider__button-hover--primary {
-      background: {{ block.settings.primary_label_hvrbg }};
+    .mhslider__heading--{{ block.id }} {
+      color: {{ block.settings.heading_color }};
     }
-  }
-  .mhslider__button--secondary-{{ block.id }} {
-    color: {{ block.settings.secondary_label_color }};
-    background: {{ block.settings.secondary_label_bg }};
-    &:hover {
-      color: {{ block.settings.secondary_label_hvrcolor }};
+    .mhslider__desc--{{ block.id }} {
+      color: {{ block.settings.desc_color }};
     }
-    &:hover > .mhslider__button-hover--secondary {
-      background: {{ block.settings.secondary_label_hvrbg }};
+    .mhslider__button--primary-{{ block.id }} {
+      color: {{ block.settings.primary_label_color }};
+      background: {{ block.settings.primary_label_bg }};
+      &:hover {
+        color: {{ block.settings.primary_label_hvrcolor }};
+      }
+      &:hover > .mhslider__button-hover--primary {
+        background: {{ block.settings.primary_label_hvrbg }};
+      }
     }
+    .mhslider__button--secondary-{{ block.id }} {
+      color: {{ block.settings.secondary_label_color }};
+      background: {{ block.settings.secondary_label_bg }};
+      &:hover {
+        color: {{ block.settings.secondary_label_hvrcolor }};
+      }
+      &:hover > .mhslider__button-hover--secondary {
+        background: {{ block.settings.secondary_label_hvrbg }};
+      }
   }
   {% endfor %}
 
+  /* =====================
+    RESPONSIVE
+  ====================== */
 
   @media (min-width: 768px) {
     .mhslider__slide-wrapper--left {
@@ -122,6 +128,7 @@
       align-items: flex-end;
     }
   }
+}
 {% endstyle %}
 
 

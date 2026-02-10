@@ -1,35 +1,41 @@
-{% comment %}
-  Basic CSS for MH Slider
-
 {% stylesheet %}
 .mhslider[data-tier="basic"] {
-    height: 600px;
-    font-size: 18px;
-}
+  height: 600px;
+  position: relative;
+  font-size: 18px;
 
-.mhslider__slide {
+  /* =====================
+     Wrapper / Slides
+  ====================== */
+  .mhslider__wrapper {
+    height: 100%;
+  }
+
+  .mhslider__slide {
     position: relative;
     padding: 0 40px;
-}
+  }
 
-.mhslider__image {
+  .mhslider__image {
     position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    top: 0;
-    left: 0;
     z-index: -1;
-}
+  }
 
-.mhslider__slide-wrapper {
+  .mhslider__slide-wrapper {
     height: inherit;
     display: flex;
     justify-content: center;
-}
+  }
 
-.mhslider__content {
+  /* =====================
+     Content
+  ====================== */
+  .mhslider__content {
     height: inherit;
     position: relative;
     display: flex;
@@ -38,26 +44,43 @@
     align-items: center;
     gap: 25px;
     text-align: center;
-}
+  }
 
-.mhslider__heading {
+  .mhslider__item {
+    margin: 0;
+    opacity: 0;
+    transition: all 1s ease;
+
+    &.mhslider__item--show-up {
+      transform: translateY(40px);
+    }
+
+    &.is-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .mhslider__heading {
     font-size: 3rem;
     line-height: normal;
-}
+  }
 
-.mhslider__desc {
+  .mhslider__desc {
     max-width: 37.5rem;
+  }
 
-}
-
-.mhslider__button-wrapper {
+  /* =====================
+     Buttons
+  ====================== */
+  .mhslider__button-wrapper {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
     gap: 10px;
-}
+  }
 
-.mhslider__button {
+  .mhslider__button {
     position: relative;
     display: inline-block;
     padding: 15px 30px;
@@ -65,97 +88,84 @@
     transition: all 0.3s ease-in-out;
     overflow: hidden;
     z-index: 0;
-    &:hover > .mhslider__button-hover {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-.mhslider__button-hover {
+    &:hover > .mhslider__button-hover {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .mhslider__button-hover {
     position: absolute;
-    left: 0;
-    top: 0;
-    display: inline-block;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     opacity: 0;
     transform: translateY(100%);
     transition: all 0.3s ease-in-out;
     z-index: -1;
-}
+  }
 
-.mhslider[data-tier="basic"].mhslider__pagination {
+  /* =====================
+     Pagination
+  ====================== */
+  .mhslider__pagination {
     display: flex;
     justify-content: center;
     gap: 15px;
     position: absolute;
-    bottom: 35px !important;
-    z-index: 10;
-}
+    inset-inline: 0;
+    inset-block-end: 20px;
 
-.mhslider__pagination-bullet {
+    &.mhslider__pagination-bullet--clickable
+      > .mhslider__pagination-bullet {
+      cursor: pointer;
+    }
+  }
+
+  .mhslider__pagination-bullet {
     width: 15px;
     opacity: 0.5;
-}
 
-.mhslider__pagination-bullet--active {
-    transform: scale(1.2);
-    transition: transform 0.3s ease-in-out;
-    opacity: 1;
-}
+    &.mhslider__pagination-bullet--active {
+      transform: scale(1.2);
+      transition: transform 0.3s ease-in-out;
+      opacity: 1;
+    }
+  }
 
-.mhslider__pagination-bullet--clickable >
-.mhslider__pagination-bullet {
-    cursor: pointer;
-}
-
-.mhslider__pagination-bullet-circle {
-    fill: #ffffff;
+  .mhslider__pagination-bullet-circle {
+    fill: #fff;
     fill-opacity: 0.5;
-    stroke: #ffffff;
+    stroke: #fff;
     stroke-width: 3;
     stroke-dasharray: 0 62.83 0;
     stroke-opacity: 0;
     transform: rotate(-90deg);
     transform-origin: center;
-}   
+  }
 
-.mhslider__pagination-bullet--active
-.mhslider__pagination-bullet-circle {
+  .mhslider__pagination-bullet--active
+  .mhslider__pagination-bullet-circle {
     stroke-opacity: 1;
-}
+  }
 
-.mhslider__item {
-    margin: 0;
-    opacity: 0;
-    transition: all 1s ease;
-}
+  /* =====================
+     Responsive
+  ====================== */
+  @media (min-width: 768px) {
+    font-size: 20px;
 
-.mhslider__item--show-up {
-    transform: translateY(40px);
-}
-
-.mhslider__item.is-active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (min-width: 768px) {
-    .mhslider {
-        font-size: 20px;
-    }
     .mhslider__slide-wrapper {
-        width: 100%;
-        max-width: 1280px;
-        margin: 0 auto;
+      max-width: 1280px;
+      margin: 0 auto;
     }
+
     .mhslider__content {
-        gap: 35px;
+      gap: 35px;
     }
-    .mhslider__button-wrapper{
-        flex-flow: row nowrap;
-        gap: 20px;
+
+    .mhslider__button-wrapper {
+      gap: 20px;
     }
+  }
 }
 {% endstylesheet %}
- {% endcomment %}

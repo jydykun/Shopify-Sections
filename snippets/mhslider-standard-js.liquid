@@ -42,7 +42,7 @@
       }
 
       const swiper = new Swiper(slider, {
-        effect: 'fade',
+        effect: 'slide',
         loop: true,
 
         autoplay: AUTOPLAY_DELAY
@@ -55,8 +55,8 @@
 
         navigation: {
           addIcons: false,
-          nextEl: '.mhslider__button-prev',
-          prevEl: '.mhslider__button-next',
+          nextEl: '.mhslider__button-next',
+          prevEl: '.mhslider__button-prev',
         },
 
         pagination: paginationEl

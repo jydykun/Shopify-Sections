@@ -47,38 +47,38 @@
 {% render 'mhslider-basic-js' %}
 
 {% style %}
+.mhslider[data-tier="basic"] {
   {% for block in section.blocks %}
-  .mhslider__slide--{{ block.id }} {
-    background: {{ block.settings.background }};
-  }
-  .mhslider__heading--{{ block.id }} {
-    color: {{ block.settings.heading_color }};
-  }
-  .mhslider__desc--{{ block.id }} {
-    color: {{ block.settings.desc_color }};
-  }
-  .mhslider__button--primary-{{ block.id }} {
-    color: {{ block.settings.primary_label_color }};
-    background: {{ block.settings.primary_label_bg }};
-    &:hover {
-      color: {{ block.settings.primary_label_hvrcolor }};
+    .mhslider__slide--{{ block.id }} {
+      background: {{ block.settings.background }};
     }
-    &:hover > .mhslider__button-hover--primary {
-      background: {{ block.settings.primary_label_hvrbg }};
+    .mhslider__heading--{{ block.id }} {
+      color: {{ block.settings.heading_color }};
     }
-  }
-  .mhslider__button--secondary-{{ block.id }} {
-    color: {{ block.settings.secondary_label_color }};
-    background: {{ block.settings.secondary_label_bg }};
-    &:hover {
-      color: {{ block.settings.secondary_label_hvrcolor }};
+    .mhslider__desc--{{ block.id }} {
+      color: {{ block.settings.desc_color }};
     }
-    &:hover > .mhslider__button-hover--secondary {
-      background: {{ block.settings.secondary_label_hvrbg }};
+    .mhslider__button--primary-{{ block.id }} {
+      color: {{ block.settings.primary_label_color }};
+      background: {{ block.settings.primary_label_bg }};
+      &:hover {
+        color: {{ block.settings.primary_label_hvrcolor }};
+      }
+      &:hover > .mhslider__button-hover--primary {
+        background: {{ block.settings.primary_label_hvrbg }};
+      }
     }
-  }
+    .mhslider__button--secondary-{{ block.id }} {
+      color: {{ block.settings.secondary_label_color }};
+      background: {{ block.settings.secondary_label_bg }};
+      &:hover {
+        color: {{ block.settings.secondary_label_hvrcolor }};
+      }
+      &:hover > .mhslider__button-hover--secondary {
+        background: {{ block.settings.secondary_label_hvrbg }};
+      }
+    }
   {% endfor %}
-
 
   @media (min-width: 768px) {
     .mhslider__slide-wrapper--left {
@@ -103,6 +103,7 @@
       align-items: flex-end;
     }
   }
+}
 {% endstyle %}
 
 {% schema %}

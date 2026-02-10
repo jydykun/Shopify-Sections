@@ -107,7 +107,7 @@
      * Init first slider only
      */
     MH.init = function (container = document) {
-      const slider = container.querySelector('.mhslider');
+      const slider = container.querySelector('.mhslider[data-tier="basic"]');
       if (slider) MH.initSlider(slider);
     };
 
