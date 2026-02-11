@@ -1,4 +1,4 @@
-<div class="swiper mhslider" data-tier="basic" data-autoplay="{{ section.settings.mhslider_autoplay }}">
+<div class="swiper mhslider" data-tier="basic">
   <div class="swiper-wrapper mhslider__wrapper">
     {% for block in section.blocks %}
       <div class="swiper-slide mhslider__slide mhslider__slide--{{ block.id }}">
@@ -7,13 +7,8 @@
         {% endif %}
         <div class="mhslider__slide-wrapper mhslider__slide-wrapper--{{ block.settings.position }}">
           <div class="mhslider__content mhslider__content--{{ block.settings.alignment }}">
-            <div class="mhslider__item mhslider__item--show-up">
-              <h2 class="mhslider__heading mhslider__heading--{{ block.id }}">{{ block.settings.heading }}</h2>
-            </div>
-            <div class="mhslider__item mhslider__item--show-up">
+              <p class="mhslider__heading mhslider__heading--{{ block.id }}">{{ block.settings.heading }}</p>
               <p class="mhslider__desc mhslider__desc--{{ block.id }}">{{ block.settings.desc }}</p>
-            </div>
-            <div class="mhslider__item mhslider__item--show-up">
               <div class="mhslider__button-wrapper">
                 <a
                   class="mhslider__button mhslider__button--primary-{{ block.id }}"
@@ -32,7 +27,6 @@
                   </a>
                 {% endif %}
               </div>
-            </div>
           </div>
         </div>
       </div>
@@ -110,18 +104,6 @@
 {
   "name": "MHSlider-Basic",
   "limit": 1,
-  "settings": [
-    {
-      "type": "range",
-      "id": "mhslider_autoplay",
-      "label": "Autoplay Delay",
-      "min": 2500,
-      "max": 5000,
-      "step": 500,
-      "unit": "ms",
-      "default": 3000
-    }
-  ],
   "blocks": [
     {
       "type": "slide",

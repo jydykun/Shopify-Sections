@@ -18,31 +18,12 @@
       // If already initialized, do nothing
       if (!slider || MH.slider) return;
 
-      const AUTOPLAY_DELAY = Number(slider.dataset.autoplay) || 5000;
+      const AUTOPLAY_DELAY = 3000;
       const PAGINATION_CIRCUMFERENCE = -62.83;
       const paginationEl = slider.querySelector('.mhslider__pagination');
 
-      function animateActiveSlide(swiper) {
-        const activeSlide = swiper.slides[swiper.activeIndex];
-        if (!activeSlide) return;
-
-        activeSlide.querySelectorAll('.mhslider__item').forEach((el, index) => {
-          el.style.transitionDelay = `${index * 0.15}s`;
-          el.classList.add('is-active');
-        });
-      }
-
-      function resetSlideItems(swiper) {
-        swiper.slides.forEach((slide) => {
-          slide.querySelectorAll('.mhslider__item').forEach((el) => {
-            el.classList.remove('is-active');
-            el.style.transitionDelay = '0s';
-          });
-        });
-      }
-
       const swiper = new Swiper(slider, {
-        effect: 'fade',
+        effect: 'slide',
         loop: true,
 
         autoplay: AUTOPLAY_DELAY
@@ -62,7 +43,7 @@
               clickableClass: 'mhslider__pagination-bullet--clickable',
               renderBullet(index, className) {
                 return `
-                <button class="${className}" aria-label="Go to slide ${index + 1}">
+                <button class="${className}">
                   <svg viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="10"
                       class="mhslider__pagination-bullet-circle" />
@@ -74,9 +55,6 @@
           : false,
 
         on: {
-          init: animateActiveSlide,
-          slideChangeTransitionStart: resetSlideItems,
-          slideChangeTransitionEnd: animateActiveSlide,
           autoplayTimeLeft(swiper, time, progress) {
             const bullet = swiper.pagination?.bullets?.[swiper.realIndex];
             const circle = bullet?.querySelector('.mhslider__pagination-bullet-circle');

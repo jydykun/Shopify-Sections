@@ -18,9 +18,11 @@
       // If already initialized, do nothing
       if (!slider || MH.slider) return;
 
-      const AUTOPLAY_DELAY = 100000//Number(slider.dataset.autoplay) || 5000;
+      const AUTOPLAY_DELAY = Number(slider.dataset.autoplay) || false;
       const PAGINATION_CIRCUMFERENCE = -62.83;
+      const EFFECT = slider.dataset.effect || 'slide';
       const paginationEl = slider.querySelector('.mhslider__pagination');
+      const navControls = slider.dataset.navArrows === 'true';
 
       function animateActiveSlide(swiper) {
         const activeSlide = swiper.slides[swiper.activeIndex];
@@ -42,22 +44,22 @@
       }
 
       const swiper = new Swiper(slider, {
-        effect: 'slide',
+        effect: EFFECT,
         loop: true,
 
         autoplay: AUTOPLAY_DELAY
           ? {
               delay: AUTOPLAY_DELAY,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
             }
           : false,
 
-        navigation: {
-          addIcons: false,
-          nextEl: '.mhslider__button-next',
-          prevEl: '.mhslider__button-prev',
-        },
+        navigation: navControls
+          ? {
+              addIcons: false,
+              nextEl: '.mhslider__button-next',
+              prevEl: '.mhslider__button-prev',
+            }
+          : false,
 
         pagination: paginationEl
           ? {
@@ -112,8 +114,9 @@
      * Init first slider only
      */
     MH.init = function (container = document) {
-      const slider = container.querySelector('.mhslider');
+      const slider = container.querySelector('.mhslider[data-tier="standard"]');
       if (slider) MH.initSlider(slider);
+      console.log(slider)
     };
 
     /**
