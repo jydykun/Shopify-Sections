@@ -1,0 +1,79 @@
+{% javascript %}
+  (function () {
+    // ----------------------------------------
+    // Global namespace protection
+    // ----------------------------------------
+    window.JD = window.JD || {};
+
+    /**
+     * Singleton slider instance
+     */
+    JD.slider = null;
+    JD.sliderEl = null;
+
+    /**
+     * Initialize ONE slider ONLY
+     */
+    JD.initSlider = function (slider) {
+      // If already initialized, do nothing
+      if (!slider || JD.slider) return;
+
+      const AUTOPLAY = slider.dataset.autoplay === 'true';
+      const SPEED = parseInt(slider.dataset.speed) || 300;
+
+      const swiper = new Swiper(slider, {
+        effect: 'slide',
+        loop: true,
+        speed: SPEED,
+        autoplay: AUTOPLAY,
+
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        
+      });
+
+      // Store singleton
+      JD.slider = swiper;
+      JD.sliderEl = slider;
+    };
+
+    /**
+     * Destroy the slider
+     */
+    JD.destroySlider = function () {
+      if (!JD.slider) return;
+
+      JD.slider.destroy(true, true);
+      JD.slider = null;
+      JD.sliderEl = null;
+    };
+
+    /**
+     * Init first slider only
+     */
+    JD.init = function (container = document) {
+      const slider = container.querySelector('.jdslider[data-tier="basic"]');
+      if (slider) JD.initSlider(slider);
+    };
+
+    /**
+     * Initial page load
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      JD.init();
+    });
+
+    /**
+     * Shopify Theme Editor Events
+     */
+    document.addEventListener('shopify:section:load', (event) => {
+      JD.init(event.target);
+    });
+
+    document.addEventListener('shopify:section:unload', () => {
+      JD.destroySlider();
+    });
+  })();
+{% endjavascript %}

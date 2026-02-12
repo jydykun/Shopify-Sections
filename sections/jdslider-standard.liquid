@@ -1,0 +1,312 @@
+<div class="swiper jdslider" data-tier="standard"
+  data-autoplay="{{ section.settings.jdslider_autoplay }}"
+  data-autoplay-delay="{{ section.settings.jdslider_autoplay_delay }}"
+  data-autoplay-pause-on-hover="{{ section.settings.jdslider_autoplay_pause }}"
+  data-speed="{{ section.settings.jdslider_speed }}"
+>
+  <div class="swiper-wrapper jdslider__wrapper">
+    {% if section.blocks.size == 0 %}
+      <div class="jdslider__slide--empty b">
+        <p>Add a slide block to get started!</p>
+      </div>
+    {% endif %}
+    
+    {% for block in section.blocks %}
+      <div class="swiper-slide jdslider__slide jdslider__slide--{{ block.id }}">
+        {% if block.settings.jdslider_slide_image != blank %}
+          {{ block.settings.jdslider_slide_image | image_url: width: 1280 | image_tag: class: 'jdslider__image' }}
+        {% endif %}
+        <div class="jdslider__slide-wrapper jdslider__slide-wrapper--{{ block.settings.jdslider_position }}">
+          <div class="jdslider__content jdslider__content--{{ block.settings.jdslider_alignment }}">
+              <p class="jdslider__heading jdslider__heading--{{ block.id }}">{{ block.settings.jdslider_heading }}</p>
+              <p class="jdslider__desc jdslider__desc--{{ block.id }}">{{ block.settings.jdslider_desc }}</p>
+              <div class="jdslider__button-wrapper">
+                <a
+                  class="jdslider__button jdslider__button--primary-{{ block.id }}"
+                  href="{{ block.settings.primary_button_link }}"
+                >
+                  <span class="jdslider__button-label">{{ block.settings.primary_button_label }}</span>
+                  <span class="jdslider__button-hover jdslider__button-hover--primary"></span>
+                </a>
+              </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  
+  </div>
+
+  <!-- NAVIGATION BUTTONS -->
+  <div class="swiper-button-next jdslider__nav-button jdslider__nav-button--{{ section.settings.jdslider_nav_size }}"></div>
+  <div class="swiper-button-prev jdslider__nav-button jdslider__nav-button--{{ section.settings.jdslider_nav_size }}"></div>
+  
+  <!-- PAGINATION -->
+  <div class="swiper-pagination jdslider__pagination"></div>
+</div>
+
+{% render 'jdslider-standard-css' %}
+{% render 'jdslider-standard-js' %}
+
+{% style %}
+.jdslider[data-tier="standard"] {
+  
+  /* =====================
+     NAVIGATION BUTTONS
+  ====================== */
+  .jdslider__nav-button {
+    color: {{ section.settings.jdslider_nav_color }};
+  }
+  .jdslider__nav-button--small {
+    scale: 0.5;
+  }
+  .jdslider__nav-button--large {
+    scale: 1.5;
+  }
+
+  /* =====================
+     BLOCKS
+  ====================== */
+
+  {% for block in section.blocks %}
+    .jdslider__slide--{{ block.id }} {
+      background: {{ block.settings.jdslider_background }};
+    }
+    .jdslider__heading--{{ block.id }} {
+      color: {{ block.settings.jdslider_heading_color }};
+    }
+    .jdslider__desc--{{ block.id }} {
+      color: {{ block.settings.jdslider_desc_color }};
+    }
+    .jdslider__button--primary-{{ block.id }} {
+      color: {{ block.settings.primary_label_color }};
+      background: {{ block.settings.primary_label_bg }};
+      &:hover {
+        color: {{ block.settings.primary_label_hvrcolor }};
+      }
+      &:hover > .jdslider__button-hover--primary {
+        background: {{ block.settings.primary_label_hvrbg }};
+      }
+    }
+  {% endfor %}
+
+  @media (min-width: 768px) {
+    .jdslider__slide-wrapper--left {
+      justify-content: flex-start;
+    }
+    .jdslider__slide-wrapper--center {
+      justify-content: center;
+    }
+    .jdslider__slide-wrapper--right {
+      justify-content: flex-end;
+    }
+    .jdslider__content--left {
+      text-align: left;
+      align-items: flex-start;
+    }
+    .jdslider__content--center {
+      text-align: center;
+      align-items: center;
+    }
+    .jdslider__content--right {
+      text-align: right;
+      align-items: flex-end;
+    }
+  }
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "JDslider-Standard",
+  "limit": 1,
+  "settings": [
+        {
+      "type": "range",
+      "id": "jdslider_speed",
+      "min": 100,
+      "max": 1000,
+      "step": 100,
+      "unit": "ms",
+      "label": "Speed",
+      "default": 300,
+    },
+    {
+      "type": "checkbox",
+      "id": "jdslider_autoplay",
+      "label": "Enable Autoplay",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Autoplay Settings",
+      "visible_if": "{{ section.settings.jdslider_autoplay }}"
+    },
+    {
+      "type": "range",
+      "id": "jdslider_autoplay_delay",
+      "min": 1000,
+      "max": 5000,
+      "step": 500,
+      "unit": "ms",
+      "label": "Delay",
+      "default": 3000,
+      "visible_if": "{{ section.settings.jdslider_autoplay }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "jdslider_autoplay_pause",
+      "label": "Pause on Hover",
+      "default": true,
+      "visible_if": "{{ section.settings.jdslider_autoplay }}"
+    },
+    {
+      "type": "header",
+      "content": "Navigation Buttons"
+    },
+    {
+      "type": "select",
+      "id": "jdslider_nav_size",
+      "label": "Size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "color",
+      "id": "jdslider_nav_color",
+      "label": "Color",
+      "default": "#007aff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Background"
+        },
+        {
+          "type": "image_picker",
+          "id": "jdslider_slide_image",
+          "label": "Background Image",
+          "info": "Recommended size: 1280px wide. Image will be cropped to fit the slide."
+        },
+        {
+          "type": "color_background",
+          "id": "jdslider_background",
+          "label": "Background Color",
+          "default": "linear-gradient(#EDEDED, #CECECE)",
+          "info": "Used as the background when no image is added."
+        },
+        {
+          "type": "header",
+          "content": "Texts"
+        },
+        {
+          "type": "text",
+          "id": "jdslider_heading",
+          "label": "Heading",
+          "default": "Lorem Ipsum"
+        },
+        {
+          "type": "color",
+          "id": "jdslider_heading_color",
+          "label": "Color",
+          "default": "#252525"
+        },
+        {
+          "type": "text",
+          "id": "jdslider_desc",
+          "label": "Description",
+          "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla at ullamcorper arcu. Morbi mattis mi mollis arcu ullamcorper, nec elementum odio vehicula."
+        },
+        {
+          "type": "color",
+          "id": "jdslider_desc_color",
+          "label": "Color",
+          "default": "#252525"
+        },
+        {
+          "type": "text_alignment",
+          "id": "jdslider_alignment",
+          "label": "Text Alignment",
+          "default": "center"
+        },
+        {
+          "type": "text_alignment",
+          "id": "jdslider_position",
+          "label": "Position",
+          "default": "center"
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "text",
+          "id": "primary_button_label",
+          "label": "Label",
+          "default": "Button"
+        },
+        {
+          "type": "url",
+          "id": "primary_button_link",
+          "label": "Link"
+        },
+        {
+          "type": "color",
+          "id": "primary_label_color",
+          "label": "Label Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "primary_label_bg",
+          "label": "Background Color",
+          "default": "#0051CA"
+        },
+        {
+          "type": "color",
+          "id": "primary_label_hvrcolor",
+          "label": "Hover Label Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "primary_label_hvrbg",
+          "label": "Hover Background Color",
+          "default": "#0041a3"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "JDslider-Standard",
+      "blocks": [
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

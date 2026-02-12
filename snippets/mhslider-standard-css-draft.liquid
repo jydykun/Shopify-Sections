@@ -1,5 +1,6 @@
+{% comment %}
 {% stylesheet %}
-.mhslider[data-tier="basic"] {
+.mhslider[data-tier="standard"] {
   height: 600px;
   position: relative;
   font-size: 18px;
@@ -46,6 +47,21 @@
     text-align: center;
   }
 
+  .mhslider__item {
+    margin: 0;
+    opacity: 0;
+    transition: all 1s ease;
+
+    &.mhslider__item--show-up {
+      transform: translateY(40px);
+    }
+
+    &.is-active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .mhslider__heading {
     font-size: 3rem;
     line-height: normal;
@@ -90,15 +106,45 @@
   }
 
   /* =====================
+     Controls
+  ====================== */
+  .mhslider__controls {
+    width: 100%;
+    padding: 0 60px;
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 20px;
+    z-index: 10;
+  }
+
+  .mhslider__controls-wrapper {
+    display: flex;
+    padding: 0 5px;
+    border-radius: 50px;
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .mhslider__button-prev,
+  .mhslider__button-next {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .mhslider__button-prev {
+    transform: rotate(180deg);
+  }
+
+  /* =====================
      Pagination
   ====================== */
   .mhslider__pagination {
     display: flex;
     justify-content: center;
     gap: 15px;
-    position: absolute;
-    inset-inline: 0;
-    inset-block-end: 20px;
 
     &.mhslider__pagination-bullet--clickable
       > .mhslider__pagination-bullet {
@@ -151,6 +197,12 @@
     .mhslider__button-wrapper {
       gap: 20px;
     }
+
+    .mhslider__controls {
+      width: 30%;
+      margin: 0 auto;
+    }
   }
 }
 {% endstylesheet %}
+ {% endcomment %}

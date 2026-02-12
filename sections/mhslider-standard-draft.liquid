@@ -1,4 +1,11 @@
-<div class="swiper mhslider" data-tier="basic">
+{% comment %}
+<div class="swiper mhslider" data-tier="standard"
+  {% if section.settings.mhslider_autoplay %}
+    data-autoplay="{{ section.settings.mhslider_autoplay_delay }}"
+  {% endif %}
+  data-nav-arrows="{{ section.settings.mhslider_navigation }}"
+  data-effect="{{ section.settings.mhslider_effect }}"
+>
   <div class="swiper-wrapper mhslider__wrapper">
     {% for block in section.blocks %}
       <div class="swiper-slide mhslider__slide mhslider__slide--{{ block.id }}">
@@ -6,9 +13,14 @@
           {{ block.settings.slide_image | image_url: width: 1280 | image_tag: class: 'mhslider__image' }}
         {% endif %}
         <div class="mhslider__slide-wrapper mhslider__slide-wrapper--{{ block.settings.position }}">
-          <div class="mhslider__content mhslider__content--{{ block.settings.alignment }}">
-              <p class="mhslider__heading mhslider__heading--{{ block.id }}">{{ block.settings.heading }}</p>
+          <article class="mhslider__content mhslider__content--{{ block.settings.alignment }}">
+            <div class="mhslider__item mhslider__item--show-up">
+              <h2 class="mhslider__heading mhslider__heading--{{ block.id }}">{{ block.settings.heading }}</h2>
+            </div>
+            <div class="mhslider__item mhslider__item--show-up">
               <p class="mhslider__desc mhslider__desc--{{ block.id }}">{{ block.settings.desc }}</p>
+            </div>
+            <div class="mhslider__item mhslider__item--show-up">
               <div class="mhslider__button-wrapper">
                 <a
                   class="mhslider__button mhslider__button--primary-{{ block.id }}"
@@ -27,21 +39,43 @@
                   </a>
                 {% endif %}
               </div>
-          </div>
+            </div>
+          </article>
         </div>
       </div>
     {% endfor %}
   </div>
 
-  <!-- PAGINATION BUTTONS -->
-  <div class="swiper-pagination mhslider__pagination"></div>
+  <!-- NAVIGATION BUTTONS -->
+  <div class="mhslider__controls">
+    <div class="mhslider__controls-wrapper">
+      {% if section.settings.mhslider_navigation %}
+        <div class="mhslider__button-prev">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.414,10.586,13.121,6.293,11.707,7.707,15,11H5v2H15l-3.293,3.293,1.414,1.414,4.293-4.293A2,2,0,0,0,17.414,10.586Z"/>
+          </svg>
+        </div>
+      {% endif %}
+
+      <div class="mhslider__pagination"></div>
+
+      {% if section.settings.mhslider_navigation %}
+        <div class="mhslider__button-next">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.414,10.586,13.121,6.293,11.707,7.707,15,11H5v2H15l-3.293,3.293,1.414,1.414,4.293-4.293A2,2,0,0,0,17.414,10.586Z"/>
+          </svg>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
 </div>
 
-{% render 'mhslider-basic-css' %}
-{% render 'mhslider-basic-js' %}
+{% render 'mhslider-standard-css' %}
+{% render 'mhslider-standard-js' %}
 
 {% style %}
-.mhslider[data-tier="basic"] {
+.mhslider[data-tier="standard"] {
   {% for block in section.blocks %}
     .mhslider__slide--{{ block.id }} {
       background: {{ block.settings.background }};
@@ -71,8 +105,37 @@
       &:hover > .mhslider__button-hover--secondary {
         background: {{ block.settings.secondary_label_hvrbg }};
       }
-    }
+  }
   {% endfor %}
+
+  /* =====================
+    NAVIGATION
+  ====================== */
+
+  {% if section.settings.mhslider_navigation == false %}
+    .mhslider__controls-wrapper {
+      background: none;
+    }
+  {% else %}
+    .mhslider__controls-wrapper {
+      background-color: {{ section.settings.mhslider_control_bgcolor }};
+    }
+    .mhslider__button-prev,
+    .mhslider__button-next {
+      color: {{ section.settings.mhslider_control_icon_color }};
+    }
+    .mhslider__pagination-bullet-circle {
+      fill: {{ section.settings.mhslider_control_icon_color }};
+      stroke: {{ section.settings.mhslider_control_icon_color }};
+      {% if section.settings.mhslider_pagination_indicator == false %}
+        stroke-width: 0;
+      {% endif %}
+    }
+  {% endif %}
+
+  /* =====================
+    RESPONSIVE
+  ====================== */
 
   @media (min-width: 768px) {
     .mhslider__slide-wrapper--left {
@@ -96,19 +159,104 @@
       text-align: right;
       align-items: flex-end;
     }
+    .mhslider__controls {
+      width: {{ section.settings.mhslider_control_width }}%;
+    }
   }
 }
 {% endstyle %}
 
+
 {% schema %}
 {
-  "name": "MHSlider-Basic",
+  "name": "MHSlider-Standard",
   "limit": 1,
+  "settings": [
+    {
+      "type": "select",
+      "id": "mhslider_effect",
+      "label": "Effect",
+      "options": [
+        {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        },
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "header",
+      "content": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "mhslider_autoplay",
+      "label": "Enable Autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "mhslider_autoplay_delay",
+      "label": "Delay",
+      "min": 2500,
+      "max": 5000,
+      "step": 500,
+      "unit": "ms",
+      "default": 3000,
+      "visible_if": "{{ section.settings.mhslider_autoplay }}"
+    },
+    {
+      "type": "header",
+      "content": "Controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "mhslider_navigation",
+      "label": "Enable Navigation Arrows",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "mhslider_control_width",
+      "label": "Width",
+      "min": 25,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 30,
+      "visible_if": "{{ section.settings.mhslider_navigation }}"
+    },
+    {
+      "type": "color",
+      "id": "mhslider_control_bgcolor",
+      "label": "Background Color",
+      "default": "#FFFFFF3B",
+      "alpha": true,
+      "visible_if": "{{ section.settings.mhslider_navigation }}"
+    },
+    {
+      "type": "color",
+      "id": "mhslider_control_icon_color",
+      "label": "Controls Color",
+      "default": "#FFFFFF",
+      "visible_if": "{{ section.settings.mhslider_navigation }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "mhslider_pagination_indicator",
+      "label": "Enable Pagination Indicator",
+      "default": true
+    },
+  ],
   "blocks": [
     {
       "type": "slide",
       "name": "Slide",
-      "limit": 3,
+      "limit": 5,
       "settings": [
         {
           "type": "header",
@@ -261,18 +409,6 @@
       ]
     }
   ],
-  "presets": [
-    {
-      "name": "MHSlider-Basic",
-      "blocks": [
-        {
-          "type": "slide"
-        },
-        {
-          "type": "slide"
-        }
-      ]
-    }
-  ]
 }
 {% endschema %}
+ {% endcomment %}
