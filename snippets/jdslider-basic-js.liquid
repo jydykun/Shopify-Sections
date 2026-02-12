@@ -1,79 +1,66 @@
 {% javascript %}
-  (function () {
-    // ----------------------------------------
-    // Global namespace protection
-    // ----------------------------------------
-    window.JD = window.JD || {};
+(function () {
 
-    /**
-     * Singleton slider instance
-     */
-    JD.slider = null;
-    JD.sliderEl = null;
+  /**
+   * Initialize slider inside ONE section
+   */
+  function initSlider(section) {
+    const slider = section.querySelector('.jdslider[data-tier="basic"]');
+    if (!slider) return;
 
-    /**
-     * Initialize ONE slider ONLY
-     */
-    JD.initSlider = function (slider) {
-      // If already initialized, do nothing
-      if (!slider || JD.slider) return;
+    // Prevent double init
+    if (slider.swiper) return;
 
-      const AUTOPLAY = slider.dataset.autoplay === 'true';
-      const SPEED = parseInt(slider.dataset.speed) || 300;
+    const AUTOPLAY = slider.dataset.autoplay === 'true';
+    const SPEED = parseInt(slider.dataset.speed) || 300;
 
-      const swiper = new Swiper(slider, {
-        effect: 'slide',
-        loop: true,
-        speed: SPEED,
-        autoplay: AUTOPLAY,
+    const swiper = new Swiper(slider, {
+      effect: 'slide',
+      loop: true,
+      speed: SPEED,
+      autoplay: AUTOPLAY ? { delay: 3000 } : false,
 
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-        },
-        
-      });
-
-      // Store singleton
-      JD.slider = swiper;
-      JD.sliderEl = slider;
-    };
-
-    /**
-     * Destroy the slider
-     */
-    JD.destroySlider = function () {
-      if (!JD.slider) return;
-
-      JD.slider.destroy(true, true);
-      JD.slider = null;
-      JD.sliderEl = null;
-    };
-
-    /**
-     * Init first slider only
-     */
-    JD.init = function (container = document) {
-      const slider = container.querySelector('.jdslider[data-tier="basic"]');
-      if (slider) JD.initSlider(slider);
-    };
-
-    /**
-     * Initial page load
-     */
-    document.addEventListener('DOMContentLoaded', () => {
-      JD.init();
+      navigation: {
+        nextEl: slider.querySelector('.swiper-button-next'),
+        prevEl: slider.querySelector('.swiper-button-prev'),
+      },
     });
 
-    /**
-     * Shopify Theme Editor Events
-     */
-    document.addEventListener('shopify:section:load', (event) => {
-      JD.init(event.target);
-    });
+    // Store instance directly on DOM element
+    slider.jdSwiper = swiper;
+    console.log(slider.swiper);
+  }
 
-    document.addEventListener('shopify:section:unload', () => {
-      JD.destroySlider();
+  /**
+   * Destroy slider inside ONE section
+   */
+  function destroySlider(section) {
+    const slider = section.querySelector('.jdslider[data-tier="basic"]');
+    if (!slider || !slider.jdSwiper) return;
+
+    slider.jdSwiper.destroy(true, true);
+    slider.jdSwiper = null;
+  }
+
+  /**
+   * Init on page load
+   */
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.shopify-section').forEach(function (section) {
+      initSlider(section);
     });
-  })();
+  });
+
+  /**
+   * Shopify Theme Editor Events
+   */
+  document.addEventListener('shopify:section:load', function (event) {
+    initSlider(event.target);
+  });
+
+  document.addEventListener('shopify:section:unload', function (event) {
+    destroySlider(event.target);
+  });
+
+})();
 {% endjavascript %}

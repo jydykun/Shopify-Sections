@@ -3,7 +3,9 @@
   data-speed="{{ section.settings.jdslider_speed }}"
 >
   <div class="swiper-wrapper jdslider__wrapper">
-    
+    {% if section.blocks.size == 0 %}
+      <div class="jdslider__slide--empty">Add slides to get started</div>
+    {% endif %}
     
     {% for block in section.blocks %}
       <div class="swiper-slide jdslider__slide jdslider__slide--{{ block.id }}">
@@ -109,7 +111,6 @@
 {% schema %}
 {
   "name": "JDslider-Basic",
-  "limit": 1,
   "settings": [
     {
       "type": "range",

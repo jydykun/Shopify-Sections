@@ -1,146 +1,80 @@
 {% javascript %}
-  (function () {
-    // ----------------------------------------
-    // Global namespace protection
-    // ----------------------------------------
-    window.JD = window.JD || {};
+(function () {
 
-    /**
-     * Singleton slider instance
-     */
-    JD.slider = null;
-    JD.sliderEl = null;
+  /**
+   * Initialize slider inside ONE section
+   */
+  function initSlider(section) {
+    const slider = section.querySelector('.jdslider[data-tier="standard"]');
+    if (!slider) return;
 
-    /**
-     * Initialize ONE slider ONLY
-     */
-    JD.initSlider = function (slider) {
-      // If already initialized, do nothing
-      if (!slider || JD.slider) return;
+    // Prevent double init
+    if (slider.swiper) return;
 
-      const SPEED = Number(slider.dataset.speed) || 300;
-      const AUTOPLAY = slider.dataset.autoplay === 'true';
-      const AUTOPLAY_DELAY = Number(slider.dataset.autoplayDelay) || 3000;
-      const AUTOPLAY_PAUSE_ON_HOVER = slider.dataset.autoplayPauseOnHover === 'true';
-      const PAGINATION_CIRCUMFERENCE = -62.83;
-      const EFFECT = slider.dataset.effect || 'slide';
-      const PAGINATION_EL = slider.querySelector('.jdslider__pagination');
-      console.log(PAGINATION_EL);
+    const AUTOPLAY = slider.dataset.autoplay === 'true';
+    const AUTOPLAY_DELAY = parseInt(slider.dataset.autoplayDelay) || 3000;
+    const PAUSE_ON_HOVER = slider.dataset.pauseOnHover === 'true';
+    const SPEED = parseInt(slider.dataset.speed) || 300;
+    const EFFECT = slider.dataset.effect || 'slide';
 
-      function animateActiveSlide(swiper) {
-        const activeSlide = swiper.slides[swiper.activeIndex];
-        if (!activeSlide) return;
+    const swiper = new Swiper(slider, {
+      effect: EFFECT,
+      loop: true,
+      speed: SPEED,
+      autoplay: AUTOPLAY
+      ? { 
+          delay: AUTOPLAY_DELAY,
+          pauseOnMouseEnter: PAUSE_ON_HOVER
+        } 
+      : false,
 
-        activeSlide.querySelectorAll('.jdslider__item').forEach((el, index) => {
-          el.style.transitionDelay = `${index * 0.15}s`;
-          el.classList.add('is-active');
-        });
-      }
+      navigation: {
+        nextEl: slider.querySelector('.swiper-button-next'),
+        prevEl: slider.querySelector('.swiper-button-prev'),
+      },
 
-      function resetSlideItems(swiper) {
-        swiper.slides.forEach((slide) => {
-          slide.querySelectorAll('.jdslider__item').forEach((el) => {
-            el.classList.remove('is-active');
-            el.style.transitionDelay = '0s';
-          });
-        });
-      }
-
-      const swiper = new Swiper(slider, {
-        effect: 'slide',
-        loop: true,
-        speed: SPEED,
-
-        autoplay: AUTOPLAY
-          ? {
-              delay: AUTOPLAY_DELAY,
-              pauseOnMouseEnter: AUTOPLAY_PAUSE_ON_HOVER,
-            }
-          : false,
-        
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
+      on: {
+        slideChangeTransitionStart: function () {
+          console.log('Slide changed to: ', this.realIndex);
         },
-        
-        pagination: PAGINATION_EL
-        ? {
-            el: PAGINATION_EL,
-            bulletClass: 'jdslider__pagination-bullet',
-            bulletActiveClass: 'jdslider__pagination-bullet--active',
-            clickable: true,
-            clickableClass: 'jdslider__pagination-bullet--clickable',
-            renderBullet(index, className) {
-              return `
-                <button class="${className}">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <circle
-                      class="jdslider__pagination-bullet-ring"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                    />
-                  </svg>
-                </button>
-              `;
-            },
-          }
-        : false,
-          
-        on: {
-          init: animateActiveSlide,
-          slideChangeTransitionStart: resetSlideItems,
-          slideChangeTransitionEnd: animateActiveSlide,
-          autoplayTimeLeft(swiper, time, progress) {
-            const bullet = swiper.pagination?.bullets?.[swiper.realIndex];
-            const circle = bullet?.querySelector('.jdslider__pagination-bullet-ring');
-            if (circle) {
-              circle.style.strokeDashoffset = PAGINATION_CIRCUMFERENCE * (1 - progress);
-            }
-          },
-        },
-      });
-
-      // Store singleton
-      JD.slider = swiper;
-      JD.sliderEl = slider;
-    };
-
-    /**
-     * Destroy the slider
-     */
-    JD.destroySlider = function () {
-      if (!JD.slider) return;
-
-      JD.slider.destroy(true, true);
-      JD.slider = null;
-      JD.sliderEl = null;
-    };
-
-    /**
-     * Init first slider only
-     */
-    JD.init = function (container = document) {
-      const slider = container.querySelector('.jdslider[data-tier="standard"]');
-      if (slider) JD.initSlider(slider);
-    };
-
-    /**
-     * Initial page load
-     */
-    document.addEventListener('DOMContentLoaded', () => {
-      JD.init();
+      }
     });
 
-    /**
-     * Shopify Theme Editor Events
-     */
-    document.addEventListener('shopify:section:load', (event) => {
-      JD.init(event.target);
-    });
+    // Store instance directly on DOM element
+    slider.jdSwiper = swiper;
+    console.log(slider.swiper);
+  }
 
-    document.addEventListener('shopify:section:unload', () => {
-      JD.destroySlider();
+  /**
+   * Destroy slider inside ONE section
+   */
+  function destroySlider(section) {
+    const slider = section.querySelector('.jdslider[data-tier="standard"]');
+    if (!slider || !slider.jdSwiper) return;
+
+    slider.jdSwiper.destroy(true, true);
+    slider.jdSwiper = null;
+  }
+
+  /**
+   * Init on page load
+   */
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.shopify-section').forEach(function (section) {
+      initSlider(section);
     });
-  })();
+  });
+
+  /**
+   * Shopify Theme Editor Events
+   */
+  document.addEventListener('shopify:section:load', function (event) {
+    initSlider(event.target);
+  });
+
+  document.addEventListener('shopify:section:unload', function (event) {
+    destroySlider(event.target);
+  });
+
+})();
 {% endjavascript %}

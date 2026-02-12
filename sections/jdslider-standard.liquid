@@ -3,6 +3,7 @@
   data-autoplay-delay="{{ section.settings.jdslider_autoplay_delay }}"
   data-autoplay-pause-on-hover="{{ section.settings.jdslider_autoplay_pause }}"
   data-speed="{{ section.settings.jdslider_speed }}"
+  data-effect="{{ section.settings.jdslider_effect }}"
 >
   <div class="swiper-wrapper jdslider__wrapper">
     {% if section.blocks.size == 0 %}
@@ -120,7 +121,23 @@
   "name": "JDslider-Standard",
   "limit": 1,
   "settings": [
+    {
+      "type": "select",
+      "id": "jdslider_effect",
+      "label": "Effect",
+      "options": [
         {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        },
+      ],
+      "default": "slide"
+    },
+    {
       "type": "range",
       "id": "jdslider_speed",
       "min": 100,
@@ -194,7 +211,7 @@
     {
       "type": "slide",
       "name": "Slide",
-      "limit": 3,
+      "limit": 5,
       "settings": [
         {
           "type": "header",
