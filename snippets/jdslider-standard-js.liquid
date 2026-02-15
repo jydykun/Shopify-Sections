@@ -11,9 +11,16 @@
     // Prevent double init
     if (slider.swiper) return;
 
+    // AUTOPLAY SETTINGS
     const AUTOPLAY = slider.dataset.autoplay === 'true';
     const AUTOPLAY_DELAY = parseInt(slider.dataset.autoplayDelay) || 3000;
     const PAUSE_ON_HOVER = slider.dataset.pauseOnHover === 'true';
+
+    //PAGINATION SETTING
+    const PAGINATION_RADIUS = 10; // DO NOT EDIT
+    const PAGINATION_CIRCUMFERENCE = -(2 * Math.PI * PAGINATION_RADIUS);  //-62.83  Formula: C=2πr 
+    const CLICKABLE = slider.querySelector('.jdslider__pagination').dataset.clickable == 'true';
+
     const SPEED = parseInt(slider.dataset.speed) || 300;
     const EFFECT = slider.dataset.effect || 'slide';
 
@@ -29,20 +36,45 @@
       : false,
 
       navigation: {
-        nextEl: slider.querySelector('.swiper-button-next'),
-        prevEl: slider.querySelector('.swiper-button-prev'),
+        addIcons: false,
+        nextEl: slider.querySelector('.jdslider__nav-button-next'),
+        prevEl: slider.querySelector('.jdslider__nav-button-prev'),
+      },
+
+      pagination: {
+        el: slider.querySelector('.jdslider__pagination'),
+        type: 'bullets',
+        bulletClass: 'jdslider__pagination-bullet',
+        bulletActiveClass: 'jdslider__pagination-bullet--active',
+        clickableClass: 'jdslider__pagination-bullet--clickable',
+        clickable: CLICKABLE,
+        renderBullet: function(index, className) {
+          return `
+            <button class="${className}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="jdslider__pagination-progress">
+                <circle cx="12" cy="12" r="${PAGINATION_RADIUS}"/>
+              </svg>
+            </button>
+          `;s
+        }
       },
 
       on: {
-        slideChangeTransitionStart: function () {
-          console.log('Slide changed to: ', this.realIndex);
+        autoplayTimeLeft(swiper, time, progress) {
+          if (!this.pagination?.bullets) return;
+
+          const bullet = this.pagination.bullets[this.realIndex];
+          const circle = bullet?.querySelector('.jdslider__pagination-progress');
+          if (!circle) return;
+
+          circle.style.strokeDashoffset =
+            PAGINATION_CIRCUMFERENCE * (1 - progress);
         },
       }
     });
 
     // Store instance directly on DOM element
     slider.jdSwiper = swiper;
-    console.log(slider.swiper);
   }
 
   /**

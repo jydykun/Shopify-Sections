@@ -38,11 +38,29 @@
   </div>
 
   <!-- NAVIGATION BUTTONS -->
-  <div class="swiper-button-next jdslider__nav-button jdslider__nav-button--{{ section.settings.jdslider_nav_size }}"></div>
-  <div class="swiper-button-prev jdslider__nav-button jdslider__nav-button--{{ section.settings.jdslider_nav_size }}"></div>
-  
+  <div class="jdslider__nav-wrapper b">
+    <div class="jdslider__nav-button-prev jdslider__nav-button
+      jdslider__nav-button--{{ section.settings.jdslider_nav_size }}
+      jdslider__nav-button--{{ section.settings.jdslider_nav_shape }}
+    ">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
+      </svg>
+    </div>
+    <div class="jdslider__nav-button-next jdslider__nav-button
+      jdslider__nav-button--{{ section.settings.jdslider_nav_size }}
+      jdslider__nav-button--{{ section.settings.jdslider_nav_shape }}
+    ">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
+      </svg>
+    </div>
+  </div>
+
   <!-- PAGINATION -->
-  <div class="swiper-pagination jdslider__pagination"></div>
+  {% if section.settings.jdslider_pagination %}
+    <div class="swiper-pagination jdslider__pagination" data-clickable="{{ section.settings.jdslider_pagination_clickable }}"></div>
+  {% endif %}
 </div>
 
 {% render 'jdslider-standard-css' %}
@@ -54,14 +72,31 @@
   /* =====================
      NAVIGATION BUTTONS
   ====================== */
+
   .jdslider__nav-button {
     color: {{ section.settings.jdslider_nav_color }};
+    background-color: {{ section.settings.jdslider_nav_bgcolor }};
+  }
+  .jdslider__nav-button--rect {
+    border-radius: 0;
+  }
+  .jdslider__nav-button--circle {
+    border-radius: 100%;
   }
   .jdslider__nav-button--small {
-    scale: 0.5;
+    scale: 1;
   }
   .jdslider__nav-button--large {
-    scale: 1.5;
+    scale: 2;
+  }
+
+  /* =====================
+      PAGINATION
+  ====================== */
+
+  .jdslider__pagination-progress {
+    fill: {{ section.settings.jdslider_pagination_color }};
+    stroke: {{ section.settings.jdslider_pagination_color }};
   }
 
   /* =====================
@@ -201,11 +236,54 @@
       "default": "normal"
     },
     {
+      "type": "select",
+      "id": "jdslider_nav_shape",
+      "label": "Shape",
+      "options": [
+        {
+          "value": "rect",
+          "label": "Rectangle"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        }
+      ],
+      "default": "circle"
+    },
+    {
       "type": "color",
       "id": "jdslider_nav_color",
       "label": "Color",
       "default": "#007aff"
-    }
+    },
+    {
+      "type": "color",
+      "id": "jdslider_nav_bgcolor",
+      "label": "Background Color",
+      "default": "#ffffff",
+      "alpha": true
+    },
+    {
+      "type": "header",
+      "content": "Pagination"
+    },
+    {
+      "type": "checkbox",
+      "id": "jdslider_pagination",
+      "label": "Enable Pagination",
+    },
+    {
+      "type": "checkbox",
+      "id": "jdslider_pagination_clickable",
+      "label": "Clickable",
+    },
+    {
+      "type": "color",
+      "id": "jdslider_pagination_color",
+      "label": "Color",
+      "default": "#ffffff",
+    },
   ],
   "blocks": [
     {

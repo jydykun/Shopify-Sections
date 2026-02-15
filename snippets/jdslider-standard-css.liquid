@@ -12,6 +12,7 @@
     height: inherit;
     font-size: 1.5rem;
     color: #666;
+    background-color: #b4b4b4;
   }
 
   /* =====================
@@ -42,11 +43,101 @@
     justify-content: center;
   }
 
-  .jdslider__button-next,
-  .jdslider__button-prev {
-    color: #007aff;
-    scale: 1;
+  /* =====================
+     Navigation Buttons
+  ====================== */
+
+  .jdslider__nav-wrapper {
+    width: 100%;
+    height: auto;
+    padding-inline: 20px;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
   }
+
+  .jdslider__nav-button {
+    padding: 5px;
+    color: #007AFF;
+    scale: 1.5;
+    border-radius: 100%;
+    background-color: #ffffff;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .jdslider__nav-button-next,
+  .jdslider__nav-button-prev {
+    transition: transform 0.3s ease;
+  }
+
+  .jdslider__nav-button > svg {
+    scale: 1.5;
+  }
+
+  .jdslider__nav-button-prev > svg {
+    transform: rotate(180deg);
+  }
+
+  .jdslider__nav-button-next {
+    &:hover {
+      transform: translateX(2px);
+    }
+  }
+
+  .jdslider__nav-button-prev {
+    &:hover {
+      transform: translateX(-2px);
+    }
+  }
+
+  /* =====================
+     Pagination
+  ====================== */
+.jdslider__pagination {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    inset-block-end: 20px;
+
+    &.jdslider__pagination-bullet--clickable
+      > .jdslider__pagination-bullet {
+      cursor: pointer;
+    }
+  }
+
+  .jdslider__pagination-bullet {
+    width: 15px;
+    opacity: 0.5;
+    transition: scale 0.3s ease;
+
+    &.jdslider__pagination-bullet--active {
+      scale: 1.2;
+      opacity: 1;
+    }
+  }
+
+  .jdslider__pagination-progress {
+    fill: #fff;
+    fill-opacity: 0.5;
+    stroke: #fff;
+    stroke-width: 3;
+    stroke-dasharray: 0 62.83 0;
+    stroke-opacity: 0;
+    transform: rotate(-90deg);
+    transform-origin: center;
+  }
+
+  .jdslider__pagination-bullet--active
+  .jdslider__pagination-progress {
+    stroke-opacity: 1;
+  }
+  
+
   /* =====================
      Content
   ====================== */
@@ -102,48 +193,6 @@
     transform: translateY(100%);
     transition: all 0.3s ease-in-out;
     z-index: -1;
-  }
-
-  /* =====================
-     Pagination
-  ====================== */
-  .jdslider__pagination {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    inset-block-end: 35px;
-
-    &.jdslider__pagination-bullet--clickable
-      > .jdslider__pagination-bullet {
-      cursor: pointer;
-    }
-  }
-
-  .jdslider__pagination-bullet {
-    width: 15px;
-    opacity: 0.5;
-
-    &.jdslider__pagination-bullet--active {
-      transform: scale(1.2);
-      transition: transform 0.3s ease-in-out;
-      opacity: 1;
-    }
-  }
-
-  .jdslider__pagination-bullet-ring {
-    fill: #fff;
-    fill-opacity: 0.5;
-    stroke: #fff;
-    stroke-width: 3;
-    stroke-dasharray: 0 62.83 0;
-    stroke-opacity: 0;
-    transform: rotate(-90deg);
-    transform-origin: center;
-  }
-
-  .jdslider__pagination-bullet--active
-  .jdslider__pagination-bullet-ring {
-    stroke-opacity: 1;
   }
 
   /* =====================
