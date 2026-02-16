@@ -64,12 +64,12 @@
 
       pagination: PAGINATION_EL
       ? {
-          el: slider.querySelector('.jdslider__pagination'),
+          el: PAGINATION_EL,
           type: 'bullets',
           bulletClass: 'jdslider__pagination-bullet',
           bulletActiveClass: 'jdslider__pagination-bullet--active',
           clickableClass: 'jdslider__pagination-bullet--clickable',
-          clickable: PAGINATION_EL.dataset.clickable == 'true',
+          clickable: PAGINATION_EL.dataset.clickable === 'true',
           renderBullet: function(index, className) {
             return `
               <button class="${className}">
