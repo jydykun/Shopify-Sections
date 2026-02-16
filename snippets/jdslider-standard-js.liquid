@@ -13,13 +13,18 @@
 
     // AUTOPLAY SETTINGS
     const AUTOPLAY = slider.dataset.autoplay === 'true';
+    if(!AUTOPLAY) console.info(`Autoplay: ${AUTOPLAY}`);
+
     const AUTOPLAY_DELAY = parseInt(slider.dataset.autoplayDelay) || 3000;
-    const PAUSE_ON_HOVER = slider.dataset.pauseOnHover === 'true';
+    const PAUSE_ON_HOVER = slider.dataset.autoplayPauseOnHover === 'true';
 
     // PAGINATION SETTING
-    const PAGINATION_EL = slider.querySelector('.jdslider__pagination');
+    const PAGINATION_EL = slider.querySelector('.jdslider__pagination') || false;
+    if(!PAGINATION_EL) console.info(`Pagination: ${PAGINATION_EL}`);
+
     const PAGINATION_RADIUS = 10; // DO NOT EDIT
     const PAGINATION_CIRCUMFERENCE = -(2 * Math.PI * PAGINATION_RADIUS);  //-62.83  Formula: C=2πr 
+    
     
     // SETTINGS
     const SPEED = parseInt(slider.dataset.speed) || 300;
@@ -52,7 +57,7 @@
       autoplay: AUTOPLAY
       ? { 
           delay: AUTOPLAY_DELAY,
-          pauseOnMouseEnter: PAUSE_ON_HOVER
+          pauseOnMouseEnter: PAUSE_ON_HOVER,
         } 
       : false,
 
