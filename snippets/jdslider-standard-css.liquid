@@ -46,6 +46,9 @@
   /* =====================
      Navigation Buttons
   ====================== */
+  :root {
+    --nav-space: 10px;
+  }
 
   .jdslider__nav-wrapper {
     width: 100%;
@@ -56,13 +59,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 10;
+    z-index: 0;
   }
 
   .jdslider__nav-button {
     padding: 5px;
     color: #007AFF;
-    scale: 1.5;
+    scale: 1;
     border-radius: 100%;
     background-color: #ffffff;
     &:hover {
@@ -75,8 +78,16 @@
     transition: transform 0.3s ease;
   }
 
+  .jdslider__nav-button-prev {
+    inset-inline-start: 10px;
+  }
+
+  .jdslider__nav-button-next {
+    inset-inline-end: 10px;
+  }
+
   .jdslider__nav-button > svg {
-    scale: 1.5;
+    scale: 1.2;
   }
 
   .jdslider__nav-button-prev > svg {
@@ -126,7 +137,7 @@
     fill-opacity: 0.5;
     stroke: #fff;
     stroke-width: 3;
-    stroke-dasharray: 0 62.83 0;
+    stroke-dasharray: 0 62.83 0; /* DO NOT EDIT */
     stroke-opacity: 0;
     transform: rotate(-90deg);
     transform-origin: center;
@@ -159,6 +170,34 @@
 
   .jdslider__desc {
     max-width: 37.5rem;
+  }
+
+  /* =====================
+     Content Transition
+  ====================== */
+  .jdslider__content-item {
+    opacity: 0;
+    transition: all 0.6s ease-in-out;
+
+    &.fade-up {
+      transform: translateY(50px);
+    }
+
+    &.fade-down {
+      transform: translateY(-50px);
+    }
+
+    &.fade-left {
+      transform: translateX(-50px);
+    }
+    &.fade-right {
+      transform: translateX(50px);
+    }
+
+    &.show {
+      transform: translate(0);
+      opacity: 1;
+    }
   }
 
   /* =====================
@@ -204,6 +243,14 @@
     .jdslider__slide-wrapper {
       max-width: 1280px;
       margin: 0 auto;
+    }
+
+    .jdslider__nav-button-prev {
+      inset-inline-start: 20px;
+    }
+
+    .jdslider__nav-button-next {
+      inset-inline-end: 20px;
     }
 
     .jdslider__content {

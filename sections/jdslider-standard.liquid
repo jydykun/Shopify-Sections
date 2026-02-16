@@ -18,9 +18,14 @@
           {{ block.settings.jdslider_slide_image | image_url: width: 1280 | image_tag: class: 'jdslider__image' }}
         {% endif %}
         <div class="jdslider__slide-wrapper jdslider__slide-wrapper--{{ block.settings.jdslider_position }}">
-          <div class="jdslider__content jdslider__content--{{ block.settings.jdslider_alignment }}">
-              <p class="jdslider__heading jdslider__heading--{{ block.id }}">{{ block.settings.jdslider_heading }}</p>
+          <article class="jdslider__content jdslider__content--{{ block.settings.jdslider_alignment }}">
+            <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
+              <h2 class="jdslider__heading jdslider__heading--{{ block.id }}">{{ block.settings.jdslider_heading }}</h2>
+            </div>
+            <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
               <p class="jdslider__desc jdslider__desc--{{ block.id }}">{{ block.settings.jdslider_desc }}</p>
+            </div>
+            <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
               <div class="jdslider__button-wrapper">
                 <a
                   class="jdslider__button jdslider__button--primary-{{ block.id }}"
@@ -30,7 +35,8 @@
                   <span class="jdslider__button-hover jdslider__button-hover--primary"></span>
                 </a>
               </div>
-          </div>
+            </div>
+          </article>
         </div>
       </div>
     {% endfor %}
@@ -38,8 +44,7 @@
   </div>
 
   <!-- NAVIGATION BUTTONS -->
-  <div class="jdslider__nav-wrapper b">
-    <div class="jdslider__nav-button-prev jdslider__nav-button
+    <div class="swiper-button-prev jdslider__nav-button-prev jdslider__nav-button
       jdslider__nav-button--{{ section.settings.jdslider_nav_size }}
       jdslider__nav-button--{{ section.settings.jdslider_nav_shape }}
     ">
@@ -47,7 +52,7 @@
         <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
       </svg>
     </div>
-    <div class="jdslider__nav-button-next jdslider__nav-button
+    <div class="swiper-button-next jdslider__nav-button-next jdslider__nav-button
       jdslider__nav-button--{{ section.settings.jdslider_nav_size }}
       jdslider__nav-button--{{ section.settings.jdslider_nav_shape }}
     ">
@@ -55,7 +60,6 @@
         <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
       </svg>
     </div>
-  </div>
 
   <!-- PAGINATION -->
   {% if section.settings.jdslider_pagination %}
@@ -84,15 +88,21 @@
     border-radius: 100%;
   }
   .jdslider__nav-button--small {
-    scale: 1;
+    scale: 0.8;
   }
   .jdslider__nav-button--large {
-    scale: 2;
+    scale: 1.2;
   }
 
   /* =====================
       PAGINATION
   ====================== */
+
+  {% if section.settings.jdslider_autoplay == false %}
+    .jdslider__pagination-progress {
+      fill-opacity: 1;
+    }
+  {% endif %}
 
   .jdslider__pagination-progress {
     fill: {{ section.settings.jdslider_pagination_color }};
@@ -154,6 +164,7 @@
 {% schema %}
 {
   "name": "JDslider-Standard",
+  "tag": "section",
   "limit": 1,
   "settings": [
     {
@@ -171,6 +182,30 @@
         },
       ],
       "default": "slide"
+    },
+    {
+      "type": "select",
+      "id": "jdslider_content_transition",
+      "label": "Content Transition",
+      "options": [
+        {
+          "value": "fade-up",
+          "label": "Fade-Up"
+        },
+        {
+          "value": "fade-down",
+          "label": "Fade-Down"
+        },
+        {
+          "value": "fade-left",
+          "label": "Fade-Left"
+        },
+        {
+          "value": "fade-right",
+          "label": "Fade-Right"
+        },
+      ],
+      "default": "fade-up"
     },
     {
       "type": "range",
@@ -277,12 +312,14 @@
       "type": "checkbox",
       "id": "jdslider_pagination_clickable",
       "label": "Clickable",
+      "visible_if": "{{ section.settings.jdslider_pagination }}"
     },
     {
       "type": "color",
       "id": "jdslider_pagination_color",
       "label": "Color",
       "default": "#ffffff",
+      "visible_if": "{{ section.settings.jdslider_pagination }}"
     },
   ],
   "blocks": [

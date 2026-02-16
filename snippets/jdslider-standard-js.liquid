@@ -16,13 +16,34 @@
     const AUTOPLAY_DELAY = parseInt(slider.dataset.autoplayDelay) || 3000;
     const PAUSE_ON_HOVER = slider.dataset.pauseOnHover === 'true';
 
-    //PAGINATION SETTING
+    // PAGINATION SETTING
+    const PAGINATION_EL = slider.querySelector('.jdslider__pagination');
     const PAGINATION_RADIUS = 10; // DO NOT EDIT
     const PAGINATION_CIRCUMFERENCE = -(2 * Math.PI * PAGINATION_RADIUS);  //-62.83  Formula: C=2πr 
-    const CLICKABLE = slider.querySelector('.jdslider__pagination').dataset.clickable == 'true';
-
+    
+    // SETTINGS
     const SPEED = parseInt(slider.dataset.speed) || 300;
     const EFFECT = slider.dataset.effect || 'slide';
+
+
+    function animateActiveSlide(swiper) {
+      const activeSlide = swiper.slides[swiper.activeIndex];
+      if (!activeSlide) return;
+
+      activeSlide.querySelectorAll('.jdslider__content-item').forEach((el, index) => {
+        el.style.transitionDelay = `${index * 0.15}s`;
+        el.classList.add('show');
+      });
+    }
+
+    function resetSlideItems(swiper) {
+      swiper.slides.forEach(slide => {
+        slide.querySelectorAll('.jdslider__content-item').forEach(el => {
+          el.classList.remove('show');
+          el.style.transitionDelay = '0s';
+        });
+      });
+    }
 
     const swiper = new Swiper(slider, {
       effect: EFFECT,
@@ -41,34 +62,47 @@
         prevEl: slider.querySelector('.jdslider__nav-button-prev'),
       },
 
-      pagination: {
-        el: slider.querySelector('.jdslider__pagination'),
-        type: 'bullets',
-        bulletClass: 'jdslider__pagination-bullet',
-        bulletActiveClass: 'jdslider__pagination-bullet--active',
-        clickableClass: 'jdslider__pagination-bullet--clickable',
-        clickable: CLICKABLE,
-        renderBullet: function(index, className) {
-          return `
-            <button class="${className}">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="jdslider__pagination-progress">
-                <circle cx="12" cy="12" r="${PAGINATION_RADIUS}"/>
-              </svg>
-            </button>
-          `;s
+      pagination: PAGINATION_EL
+      ? {
+          el: slider.querySelector('.jdslider__pagination'),
+          type: 'bullets',
+          bulletClass: 'jdslider__pagination-bullet',
+          bulletActiveClass: 'jdslider__pagination-bullet--active',
+          clickableClass: 'jdslider__pagination-bullet--clickable',
+          clickable: PAGINATION_EL.dataset.clickable == 'true',
+          renderBullet: function(index, className) {
+            return `
+              <button class="${className}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="jdslider__pagination-progress">
+                  <circle cx="12" cy="12" r="${PAGINATION_RADIUS}"/>
+                </svg>
+              </button>
+            `;
+          }
         }
-      },
+      : false,
 
       on: {
-        autoplayTimeLeft(swiper, time, progress) {
-          if (!this.pagination?.bullets) return;
+        init(swiper) {
+          animateActiveSlide(swiper);
+        },
 
-          const bullet = this.pagination.bullets[this.realIndex];
+        autoplayTimeLeft(swiper, time, progress) {
+          if (!swiper.pagination?.bullets) return;
+
+          const bullet = swiper.pagination.bullets[swiper.realIndex];
           const circle = bullet?.querySelector('.jdslider__pagination-progress');
           if (!circle) return;
+          
+          circle.style.strokeDashoffset = PAGINATION_CIRCUMFERENCE * (1 - progress);
+        },
 
-          circle.style.strokeDashoffset =
-            PAGINATION_CIRCUMFERENCE * (1 - progress);
+        slideChangeTransitionStart(swiper) {
+          resetSlideItems(swiper);
+        },
+
+        slideChangeTransitionEnd(swiper) {
+          animateActiveSlide(swiper)
         },
       }
     });
