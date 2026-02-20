@@ -20,22 +20,49 @@
         <div class="jdslider__slide-wrapper jdslider__slide-wrapper--{{ block.settings.jdslider_position }}">
           <article class="jdslider__content jdslider__content--{{ block.settings.jdslider_alignment }}">
             <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
+              {{ section.index }}
               <h2 class="jdslider__heading jdslider__heading--{{ block.id }}">{{ block.settings.jdslider_heading }}</h2>
             </div>
             <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
               <p class="jdslider__desc jdslider__desc--{{ block.id }}">{{ block.settings.jdslider_desc }}</p>
             </div>
-            <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
-              <div class="jdslider__button-wrapper">
-                <a
-                  class="jdslider__button jdslider__button--primary-{{ block.id }}"
-                  href="{{ block.settings.primary_button_link }}"
-                >
-                  <span class="jdslider__button-label">{{ block.settings.primary_button_label }}</span>
-                  <span class="jdslider__button-hover jdslider__button-hover--primary"></span>
-                </a>
-              </div>
-            </div>
+            {% case block.settings.jdslider_button %}
+              {% when 'one' %}
+                <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
+                  <div class="jdslider__button-wrapper">
+                    <a
+                      class="jdslider__button jdslider__button--primary-{{ block.id }}"
+                      href="{{ block.settings.primary_button_link }}"
+                    >
+                      <span class="jdslider__button-label">{{ block.settings.primary_button_label }}</span>
+                      <span class="jdslider__button-hover jdslider__button-hover--primary"></span>
+                    </a>
+                  </div>
+                </div>
+              {% when 'two' %}
+                <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
+                  <div class="jdslider__button-wrapper">
+                    <a
+                      class="jdslider__button jdslider__button--primary-{{ block.id }}"
+                      href="{{ block.settings.primary_button_link }}"
+                    >
+                      <span class="jdslider__button-label">{{ block.settings.primary_button_label }}</span>
+                      <span class="jdslider__button-hover jdslider__button-hover--primary"></span>
+                    </a>
+                    <a
+                      class="jdslider__button jdslider__button--secondary-{{ block.id }}"
+                      href="{{ block.settings.secondary_button_link }}"
+                    >
+                      <span class="jdslider__button-label">{{ block.settings.secondary_button_label }}</span>
+                      <span class="jdslider__button-hover jdslider__button-hover--secondary"></span>
+                    </a>
+                  </div>
+                </div>
+              {% else %}
+                {% comment %}
+                  NO BUTTONS
+                {% endcomment %}
+            {% endcase %}
           </article>
         </div>
       </div>
@@ -81,7 +108,7 @@
     color: {{ section.settings.jdslider_nav_color }};
     background-color: {{ section.settings.jdslider_nav_bgcolor }};
   }
-  .jdslider__nav-button--rect {
+  .jdslider__nav-button--square {
     border-radius: 0;
   }
   .jdslider__nav-button--circle {
@@ -123,6 +150,9 @@
     .jdslider__desc--{{ block.id }} {
       color: {{ block.settings.jdslider_desc_color }};
     }
+    .jdslider__button {
+      border-radius: {{ block.settings.jdslider_button_radius }}px;
+    }
     .jdslider__button--primary-{{ block.id }} {
       color: {{ block.settings.primary_label_color }};
       background: {{ block.settings.primary_label_bg }};
@@ -131,6 +161,16 @@
       }
       &:hover > .jdslider__button-hover--primary {
         background: {{ block.settings.primary_label_hvrbg }};
+      }
+    }
+    .jdslider__button--secondary-{{ block.id }} {
+      color: {{ block.settings.secondary_label_color }};
+      background: {{ block.settings.secondary_label_bg }};
+      &:hover {
+        color: {{ block.settings.secondary_label_hvrcolor }};
+      }
+      &:hover > .jdslider__button-hover--secondary {
+        background: {{ block.settings.secondary_label_hvrbg }};
       }
     }
   {% endfor %}
@@ -276,8 +316,8 @@
       "label": "Shape",
       "options": [
         {
-          "value": "rect",
-          "label": "Rectangle"
+          "value": "square",
+          "label": "Square"
         },
         {
           "value": "circle",
@@ -390,39 +430,122 @@
           "content": "Button"
         },
         {
+          "type": "select",
+          "id": "jdslider_button",
+          "label": "Number of buttons",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "one",
+              "label": "One"
+            },
+            {
+              "value": "two",
+              "label": "Two"
+            }
+          ],
+          "default": "one"
+        },
+        {
+          "type": "range",
+          "id": "jdslider_button_radius",
+          "min": 0,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Border Radius",
+          "default": 5,
+          "visible_if": "{{ block.settings.jdslider_button != 'none' }}"
+        },
+        {
           "type": "text",
           "id": "primary_button_label",
           "label": "Label",
-          "default": "Button"
+          "default": "Button",
+          "visible_if": "{{ block.settings.jdslider_button != 'none' }}"
         },
         {
           "type": "url",
           "id": "primary_button_link",
-          "label": "Link"
+          "label": "Link",
+          "visible_if": "{{ block.settings.jdslider_button != 'none' }}"
         },
         {
           "type": "color",
           "id": "primary_label_color",
           "label": "Label Color",
-          "default": "#ffffff"
+          "default": "#ffffff",
+          "visible_if": "{{ block.settings.jdslider_button != 'none' }}"
         },
         {
           "type": "color",
           "id": "primary_label_bg",
           "label": "Background Color",
-          "default": "#0051CA"
+          "default": "#0051CA",
+          "visible_if": "{{ block.settings.jdslider_button != 'none' }}"
         },
         {
           "type": "color",
           "id": "primary_label_hvrcolor",
           "label": "Hover Label Color",
-          "default": "#ffffff"
+          "default": "#ffffff",
+          "visible_if": "{{ block.settings.jdslider_button != 'none' }}"
         },
         {
           "type": "color",
           "id": "primary_label_hvrbg",
           "label": "Hover Background Color",
-          "default": "#0041a3"
+          "default": "#0041a3",
+          "visible_if": "{{ block.settings.jdslider_button != 'none' }}"
+        },
+        {
+          "type": "header",
+          "content": "Secondary Button",
+          "visible_if": "{{ block.settings.jdslider_button == 'two' }}"
+        },
+        {
+          "type": "text",
+          "id": "secondary_button_label",
+          "label": "Label",
+          "default": "Button",
+          "visible_if": "{{ block.settings.jdslider_button == 'two' }}"
+        },
+        {
+          "type": "url",
+          "id": "secondary_button_link",
+          "label": "Link",
+          "visible_if": "{{ block.settings.jdslider_button == 'two' }}"
+        },
+        {
+          "type": "color",
+          "id": "secondary_label_color",
+          "label": "Label Color",
+          "default": "#ffffff",
+          "visible_if": "{{ block.settings.jdslider_button == 'two' }}"
+        },
+        {
+          "type": "color",
+          "id": "secondary_label_bg",
+          "label": "Background Color",
+          "default": "#0051CA",
+          "visible_if": "{{ block.settings.jdslider_button == 'two' }}"
+        },
+        {
+          "type": "color",
+          "id": "secondary_label_hvrcolor",
+          "label": "Hover Label Color",
+          "default": "#ffffff",
+          "visible_if": "{{ block.settings.jdslider_button == 'two' }}"
+        },
+        {
+          "type": "color",
+          "id": "secondary_label_hvrbg",
+          "label": "Hover Background Color",
+          "default": "#0041a3",
+          "visible_if": "{{ block.settings.jdslider_button == 'two' }}"
         }
       ]
     }
