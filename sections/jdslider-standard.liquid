@@ -20,8 +20,15 @@
         <div class="jdslider__slide-wrapper jdslider__slide-wrapper--{{ block.settings.jdslider_position }}">
           <article class="jdslider__content jdslider__content--{{ block.settings.jdslider_alignment }}">
             <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
-              {{ section.index }}
-              <h2 class="jdslider__heading jdslider__heading--{{ block.id }}">{{ block.settings.jdslider_heading }}</h2>
+              {% comment %}
+                SEO optimization:
+                The first slide uses an <h1> heading; subsequent slides use lower-level headings.
+              {% endcomment %}
+              {% if forloop.first %}
+                <h1 class="jdslider__heading jdslider__heading--{{ block.id }}">{{ block.settings.jdslider_heading }}</h1>
+              {% else %}
+                <h2 class="jdslider__heading jdslider__heading--{{ block.id }}">{{ block.settings.jdslider_heading }}</h2>
+              {% endif %}
             </div>
             <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
               <p class="jdslider__desc jdslider__desc--{{ block.id }}">{{ block.settings.jdslider_desc }}</p>
