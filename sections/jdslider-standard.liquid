@@ -25,20 +25,20 @@
                 The first slide uses an <h1> heading; subsequent slides use lower-level headings.
               {% endcomment %}
               {% if forloop.first %}
-                <h1 class="jdslider__heading jdslider__heading--{{ block.id }}">{{ block.settings.jdslider_heading }}</h1>
+                <h1 class="jdslider__heading">{{ block.settings.jdslider_heading }}</h1>
               {% else %}
-                <h2 class="jdslider__heading jdslider__heading--{{ block.id }}">{{ block.settings.jdslider_heading }}</h2>
+                <h2 class="jdslider__heading">{{ block.settings.jdslider_heading }}</h2>
               {% endif %}
             </div>
             <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
-              <p class="jdslider__desc jdslider__desc--{{ block.id }}">{{ block.settings.jdslider_desc }}</p>
+              <p class="jdslider__desc">{{ block.settings.jdslider_desc }}</p>
             </div>
             {% case block.settings.jdslider_button %}
               {% when 'one' %}
                 <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
                   <div class="jdslider__button-wrapper">
                     <a
-                      class="jdslider__button jdslider__button--primary-{{ block.id }}"
+                      class="jdslider__button jdslider__button--primary"
                       href="{{ block.settings.primary_button_link }}"
                     >
                       <span class="jdslider__button-label">{{ block.settings.primary_button_label }}</span>
@@ -50,14 +50,14 @@
                 <div class="jdslider__content-item {{ section.settings.jdslider_content_transition }}">
                   <div class="jdslider__button-wrapper">
                     <a
-                      class="jdslider__button jdslider__button--primary-{{ block.id }}"
+                      class="jdslider__button jdslider__button--primary"
                       href="{{ block.settings.primary_button_link }}"
                     >
                       <span class="jdslider__button-label">{{ block.settings.primary_button_label }}</span>
                       <span class="jdslider__button-hover jdslider__button-hover--primary"></span>
                     </a>
                     <a
-                      class="jdslider__button jdslider__button--secondary-{{ block.id }}"
+                      class="jdslider__button jdslider__button--secondary"
                       href="{{ block.settings.secondary_button_link }}"
                     >
                       <span class="jdslider__button-label">{{ block.settings.secondary_button_label }}</span>
@@ -150,35 +150,37 @@
   {% for block in section.blocks %}
     .jdslider__slide--{{ block.id }} {
       background: {{ block.settings.jdslider_background }};
-    }
-    .jdslider__heading--{{ block.id }} {
-      color: {{ block.settings.jdslider_heading_color }};
-    }
-    .jdslider__desc--{{ block.id }} {
-      color: {{ block.settings.jdslider_desc_color }};
-    }
-    .jdslider__button {
-      border-radius: {{ block.settings.jdslider_button_radius }}px;
-    }
-    .jdslider__button--primary-{{ block.id }} {
-      color: {{ block.settings.primary_label_color }};
-      background: {{ block.settings.primary_label_bg }};
-      &:hover {
-        color: {{ block.settings.primary_label_hvrcolor }};
+      
+      .jdslider__heading {
+        color: {{ block.settings.jdslider_heading_color }};
       }
-      &:hover > .jdslider__button-hover--primary {
-        background: {{ block.settings.primary_label_hvrbg }};
+      .jdslider__desc {
+        color: {{ block.settings.jdslider_desc_color }};
       }
-    }
-    .jdslider__button--secondary-{{ block.id }} {
-      color: {{ block.settings.secondary_label_color }};
-      background: {{ block.settings.secondary_label_bg }};
-      &:hover {
-        color: {{ block.settings.secondary_label_hvrcolor }};
+      .jdslider__button {
+        border-radius: {{ block.settings.jdslider_button_radius }}px;
       }
-      &:hover > .jdslider__button-hover--secondary {
-        background: {{ block.settings.secondary_label_hvrbg }};
+      .jdslider__button--primary {
+        color: {{ block.settings.primary_label_color }};
+        background: {{ block.settings.primary_label_bg }};
+        &:hover {
+          color: {{ block.settings.primary_label_hvrcolor }};
+        }
+        &:hover > .jdslider__button-hover--primary {
+          background: {{ block.settings.primary_label_hvrbg }};
+        }
       }
+      .jdslider__button--secondary {
+        color: {{ block.settings.secondary_label_color }};
+        background: {{ block.settings.secondary_label_bg }};
+        &:hover {
+          color: {{ block.settings.secondary_label_hvrcolor }};
+        }
+        &:hover > .jdslider__button-hover--secondary {
+          background: {{ block.settings.secondary_label_hvrbg }};
+        }
+      }
+
     }
   {% endfor %}
 
