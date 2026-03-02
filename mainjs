@@ -1,0 +1,150 @@
+{% javascript %}
+(function () {
+  const CONFIG = {
+    PAGINATION_RADIUS: 10,
+    get PAGINATION_CIRCUMFERENCE() {
+      return 2 * Math.PI * this.PAGINATION_RADIUS;
+    },
+    DEFAULT_SPEED: 300,
+    DEFAULT_AUTOPLAY_DELAY: 3000,
+    DEFAULT_ITEM_DELAY: 0.15,
+    VALID_EFFECTS: ['slide', 'fade', 'cube', 'coverflow', 'flip', 'creative', 'cards']
+  };
+
+  function initSlider(section) {
+    try {
+      const slider = section.querySelector('.jdslider[data-tier="standard"]');
+      if (!slider || slider.jdSwiper) return;
+
+      // Parse and validate settings
+      const settings = {
+        autoplay: slider.dataset.autoplay === 'true',
+        autoplayDelay: Math.max(100, parseInt(slider.dataset.autoplayDelay)) || CONFIG.DEFAULT_AUTOPLAY_DELAY,
+        pauseOnHover: slider.dataset.autoplayPauseOnHover === 'true',
+        speed: Math.max(0, parseInt(slider.dataset.speed)) || CONFIG.DEFAULT_SPEED,
+        effect: CONFIG.VALID_EFFECTS.includes(slider.dataset.effect) ? slider.dataset.effect : 'slide',
+        itemDelay: Math.max(0, parseFloat(slider.dataset.itemDelay)) || CONFIG.DEFAULT_ITEM_DELAY
+      };
+
+      const paginationEl = slider.querySelector('.jdslider__pagination');
+      const navNext = slider.querySelector('.jdslider__nav-button-next');
+      const navPrev = slider.querySelector('.jdslider__nav-button-prev');
+
+      function animateActiveSlide(swiper) {
+        const activeSlide = swiper.slides[swiper.activeIndex];
+        if (!activeSlide) return;
+
+        activeSlide.querySelectorAll('.jdslider__content-item').forEach((el, index) => {
+          el.style.transitionDelay = `${index * settings.itemDelay}s`;
+          el.classList.add('show');
+        });
+      }
+
+      function resetSlideItems(swiper) {
+        swiper.slides.forEach(slide => {
+          slide.querySelectorAll('.jdslider__content-item').forEach(el => {
+            el.classList.remove('show');
+            el.style.transitionDelay = '';
+          });
+        });
+      }
+
+      const swiperConfig = {
+        effect: settings.effect,
+        loop: true,
+        speed: settings.speed,
+        autoplay: settings.autoplay ? { 
+          delay: settings.autoplayDelay,
+          pauseOnMouseEnter: settings.pauseOnHover,
+          disableOnInteraction: false,
+        } : false,
+
+        on: {
+          init(swiper) {
+            animateActiveSlide(swiper);
+            
+            // Cache circle elements for better performance
+            if (swiper.pagination?.bullets) {
+              swiper.paginationCircles = Array.from(swiper.pagination.bullets).map(
+                bullet => bullet.querySelector('.jdslider__pagination-progress circle')
+              );
+            }
+          },
+
+          autoplayTimeLeft(swiper, time, progress) {
+            if (!swiper.paginationCircles) return;
+            
+            const circle = swiper.paginationCircles[swiper.realIndex];
+            if (circle) {
+              const offset = CONFIG.PAGINATION_CIRCUMFERENCE * (1 - progress);
+              circle.style.strokeDashoffset = offset;
+            }
+          },
+
+          slideChangeTransitionStart(swiper) {
+            resetSlideItems(swiper);
+          },
+
+          slideChangeTransitionEnd(swiper) {
+            animateActiveSlide(swiper);
+          },
+        }
+      };
+
+      // Add navigation if elements exist
+      if (navNext || navPrev) {
+        swiperConfig.navigation = {
+          nextEl: navNext,
+          prevEl: navPrev,
+        };
+      }
+
+      // Add pagination if element exists
+      if (paginationEl) {
+        swiperConfig.pagination = {
+          el: paginationEl,
+          type: 'bullets',
+          bulletClass: 'jdslider__pagination-bullet',
+          bulletActiveClass: 'jdslider__pagination-bullet--active',
+          clickableClass: 'jdslider__pagination-bullet--clickable',
+          clickable: paginationEl.dataset.clickable === 'true',
+          renderBullet: function(index, className) {
+            const circumference = CONFIG.PAGINATION_CIRCUMFERENCE;
+            return `
+              <button class="${className}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="jdslider__pagination-progress">
+                  <circle cx="12" cy="12" r="${CONFIG.PAGINATION_RADIUS}" 
+                          style="stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference}"/>
+                </svg>
+              </button>
+            `;
+          }
+        };
+      }
+
+      slider.jdSwiper = new Swiper(slider, swiperConfig);
+      
+    } catch (error) {
+      console.error('Slider initialization failed:', error);
+    }
+  }
+
+  function destroySlider(section) {
+    const slider = section.querySelector('.jdslider[data-tier="standard"]');
+    if (slider?.jdSwiper) {
+      slider.jdSwiper.destroy(true, true);
+      slider.jdSwiper = null;
+    }
+  }
+
+  // Initialize on DOM ready
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.shopify-section').forEach(initSlider);
+  });
+
+  // Shopify Theme Editor events
+  document.addEventListener('shopify:section:load', (e) => initSlider(e.target));
+  document.addEventListener('shopify:section:unload', (e) => destroySlider(e.target));
+
+})();
+{% endjavascript %}

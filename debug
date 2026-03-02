@@ -1,0 +1,240 @@
+{% javascript %}
+(function () {
+  const CONFIG = {
+    PAGINATION_RADIUS: 10,
+    get PAGINATION_CIRCUMFERENCE() {
+      return 2 * Math.PI * this.PAGINATION_RADIUS;
+    },
+    DEFAULT_SPEED: 300,
+    DEFAULT_AUTOPLAY_DELAY: 3000,
+    DEFAULT_ITEM_DELAY: 0.15,
+    VALID_EFFECTS: ['slide', 'fade', 'cube', 'coverflow', 'flip', 'creative', 'cards'],
+    
+    // 🐛 DEBUG MODE
+    DEBUG: (
+      window.location.search.includes('debug=true') ||
+      window.location.hostname === 'localhost' ||
+      localStorage.getItem('jdslider-debug') === 'true'
+    )
+  };
+
+  // 🐛 DEBUG HELPERS
+  function debugLog(message, data) {
+    if (!CONFIG.DEBUG) return;
+    if (data !== undefined) {
+      console.log(message, data);
+    } else {
+      console.log(message);
+    }
+  }
+
+  function debugGroup(title, fn) {
+    if (!CONFIG.DEBUG) return;
+    console.group(title);
+    fn();
+    console.groupEnd();
+  }
+
+  function debugError(message, error) {
+    console.error(message, error);
+    if (CONFIG.DEBUG && error?.stack) {
+      console.error('Stack:', error.stack);
+    }
+  }
+
+  function debugCompare(label, before, after) {
+    if (!CONFIG.DEBUG) return;
+    
+    console.group(`🔄 ${label}`);
+    console.log('Before:', before);
+    console.log('After:', after);
+    
+    Object.keys(after).forEach(key => {
+      if (before[key] != after[key]) {
+        console.warn(`  ⚠️ ${key}: "${before[key]}" → ${after[key]}`);
+      }
+    });
+    console.groupEnd();
+  }
+
+  function initSlider(section) {
+    try {
+      const slider = section.querySelector('.jdslider[data-tier="standard"]');
+      if (!slider || slider.jdSwiper) return;
+
+      debugGroup('🔧 Slider Initialization', () => {
+        debugLog('Element:', slider);
+        debugLog('Dataset:', slider.dataset);
+      });
+
+      const rawSettings = {
+        autoplay: slider.dataset.autoplay,
+        autoplayDelay: slider.dataset.autoplayDelay,
+        pauseOnHover: slider.dataset.autoplayPauseOnHover,
+        speed: slider.dataset.speed,
+        effect: slider.dataset.effect,
+        itemDelay: slider.dataset.itemDelay
+      };
+
+      const settings = {
+        autoplay: slider.dataset.autoplay === 'true',
+        autoplayDelay: Math.max(100, parseInt(slider.dataset.autoplayDelay)) || CONFIG.DEFAULT_AUTOPLAY_DELAY,
+        pauseOnHover: slider.dataset.autoplayPauseOnHover === 'true',
+        speed: Math.max(0, parseInt(slider.dataset.speed)) || CONFIG.DEFAULT_SPEED,
+        effect: CONFIG.VALID_EFFECTS.includes(slider.dataset.effect) ? slider.dataset.effect : 'slide',
+        itemDelay: Math.max(0, parseFloat(slider.dataset.itemDelay)) || CONFIG.DEFAULT_ITEM_DELAY
+      };
+
+      debugCompare('Settings Parsing', rawSettings, settings);
+
+      const paginationEl = slider.querySelector('.jdslider__pagination');
+      const navNext = slider.querySelector('.jdslider__nav-button-next');
+      const navPrev = slider.querySelector('.jdslider__nav-button-prev');
+
+      debugLog('🎯 Elements Found:', {
+        pagination: !!paginationEl,
+        navNext: !!navNext,
+        navPrev: !!navPrev
+      });
+
+      function animateActiveSlide(swiper) {
+        const activeSlide = swiper.slides[swiper.activeIndex];
+        if (!activeSlide) return;
+
+        activeSlide.querySelectorAll('.jdslider__content-item').forEach((el, index) => {
+          el.style.transitionDelay = `${index * settings.itemDelay}s`;
+          el.classList.add('show');
+        });
+      }
+
+      function resetSlideItems(swiper) {
+        swiper.slides.forEach(slide => {
+          slide.querySelectorAll('.jdslider__content-item').forEach(el => {
+            el.classList.remove('show');
+            el.style.transitionDelay = '';
+          });
+        });
+      }
+
+      const swiperConfig = {
+        effect: settings.effect,
+        loop: true,
+        speed: settings.speed,
+        autoplay: settings.autoplay ? { 
+          delay: settings.autoplayDelay,
+          pauseOnMouseEnter: settings.pauseOnHover,
+          disableOnInteraction: false,
+        } : false,
+
+        on: {
+          init(swiper) {
+            animateActiveSlide(swiper);
+            
+            if (swiper.pagination?.bullets) {
+              swiper.paginationCircles = Array.from(swiper.pagination.bullets).map(
+                bullet => bullet.querySelector('.jdslider__pagination-progress circle')
+              );
+            }
+
+            debugGroup('🎡 Swiper Created', () => {
+              debugLog('Slides:', swiper.slides.length);
+              debugLog('Real slides:', swiper.slides.length - 2);
+              debugLog('Active:', swiper.activeIndex);
+              debugLog('Autoplay:', swiper.autoplay?.running || false);
+            });
+          },
+
+          autoplayTimeLeft(swiper, time, progress) {
+            if (!swiper.paginationCircles) return;
+            
+            const circle = swiper.paginationCircles[swiper.realIndex];
+            if (circle) {
+              const offset = CONFIG.PAGINATION_CIRCUMFERENCE * (1 - progress);
+              circle.style.strokeDashoffset = offset;
+            }
+          },
+
+          slideChangeTransitionStart(swiper) {
+            resetSlideItems(swiper);
+            debugLog(`🔄 Changing: ${swiper.previousIndex} → ${swiper.activeIndex}`);
+          },
+
+          slideChangeTransitionEnd(swiper) {
+            animateActiveSlide(swiper);
+            debugLog(`✅ Changed to: ${swiper.activeIndex} (real: ${swiper.realIndex})`);
+          },
+        }
+      };
+
+      if (navNext || navPrev) {
+        swiperConfig.navigation = {
+          nextEl: navNext,
+          prevEl: navPrev,
+        };
+      }
+
+      if (paginationEl) {
+        swiperConfig.pagination = {
+          el: paginationEl,
+          type: 'bullets',
+          bulletClass: 'jdslider__pagination-bullet',
+          bulletActiveClass: 'jdslider__pagination-bullet--active',
+          clickableClass: 'jdslider__pagination-bullet--clickable',
+          clickable: paginationEl.dataset.clickable === 'true',
+          renderBullet: function(index, className) {
+            const circumference = CONFIG.PAGINATION_CIRCUMFERENCE;
+            return `
+              <button class="${className}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="jdslider__pagination-progress">
+                  <circle cx="12" cy="12" r="${CONFIG.PAGINATION_RADIUS}" 
+                          style="stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference}"/>
+                </svg>
+              </button>
+            `;
+          }
+        };
+      }
+
+      debugLog('⚙️ Final Config:', swiperConfig);
+
+      slider.jdSwiper = new Swiper(slider, swiperConfig);
+
+      // 🐛 Expose to console
+      if (CONFIG.DEBUG) {
+        window.jdSliderDebug = {
+          instance: slider.jdSwiper,
+          element: slider,
+          settings: settings,
+          goToSlide: (i) => slider.jdSwiper.slideTo(i),
+          info: () => {
+            console.log('Active:', slider.jdSwiper.activeIndex);
+            console.log('Real:', slider.jdSwiper.realIndex);
+            console.log('Total:', slider.jdSwiper.slides.length);
+          }
+        };
+        console.log('💡 Access: window.jdSliderDebug');
+      }
+      
+    } catch (error) {
+      debugError('❌ Init failed:', error);
+    }
+  }
+
+  function destroySlider(section) {
+    const slider = section.querySelector('.jdslider[data-tier="standard"]');
+    if (slider?.jdSwiper) {
+      debugLog('🗑️ Destroying slider');
+      slider.jdSwiper.destroy(true, true);
+      slider.jdSwiper = null;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.shopify-section').forEach(initSlider);
+  });
+
+  document.addEventListener('shopify:section:load', (e) => initSlider(e.target));
+  document.addEventListener('shopify:section:unload', (e) => destroySlider(e.target));
+
+})();
+{% endjavascript %}
