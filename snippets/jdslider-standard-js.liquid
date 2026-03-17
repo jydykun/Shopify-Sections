@@ -111,12 +111,12 @@
           renderBullet: function(index, className) {
             const circumference = CONFIG.PAGINATION_CIRCUMFERENCE;
             return `
-              <button class="${className}">
+              <span class="${className}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="jdslider__pagination-progress">
                   <circle cx="12" cy="12" r="${CONFIG.PAGINATION_RADIUS}" 
                           style="stroke-dasharray: ${circumference}; stroke-dashoffset: ${circumference}"/>
                 </svg>
-              </button>
+              </span>
             `;
           }
         };
